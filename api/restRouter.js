@@ -1,7 +1,7 @@
 import express from "express";
-import { homeRouter } from "./home/home.route.js"
+import { pagesRouter } from "./pages/pages.route.js"
 import { boatInfoRouter } from "./boat-info/boat-info.route.js"
 
 export const restRouter = express.Router();
-restRouter.use('/home', homeRouter)
+restRouter.use('/pages', pagesRouter)
 restRouter.use('/boat', boatInfoRouter)

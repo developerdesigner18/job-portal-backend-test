@@ -21,7 +21,8 @@ const boatInfoSchema = Schema({
     },
     boat_images: [{
         name: String,
-    }]
+    }],
+    status: String
 }, {
     timestamps: true
 })

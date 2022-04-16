@@ -2,8 +2,8 @@ import mongoose from 'mongoose';
 // import pkg from 'mongoose';
 const { Schema } = mongoose;
 
-const collectionName = 'home'
-const homeSchema = Schema({
+const collectionName = 'pages'
+const pagesSchema = Schema({
     page: String,
     media: {
         landing_video: String,
@@ -23,4 +23,4 @@ const homeSchema = Schema({
     timestamps: true
 })
 
-export const Home = mongoose.model('Home', homeSchema, collectionName)
+export const Pages = mongoose.model('Pages', pagesSchema, collectionName)

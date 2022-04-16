@@ -57,8 +57,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api', restRouter)
 app.use('/auth', authRouter)
 
-app.use(express.static(__dirname + '/public/home'))
-app.use(express.static(__dirname + '/public/boat-info'))
+app.use(express.static(__dirname + '/public'))
 
 if (config.NODE_ENV === "development") {
     console.log("This is the development environment".inverse.yellow)

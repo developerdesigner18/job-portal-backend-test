@@ -40,7 +40,8 @@ export const signin = async (req, res) => {
           res.status(200).send({
             success: true,
             token: tokenForUser(userExistence),
-            data: userExistence
+            data: userExistence,
+            message: 'user successfully logged in'
           });
         }
       }

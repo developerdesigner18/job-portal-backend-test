@@ -1,9 +1,13 @@
 import express from "express";
 import {
     getBoatInfoAll,
+    getActiveBoatInfoAll,
+    getBoatInfoAllByType,
     getBoatInfoById,
     insertBoatInfo,
-    updateBoatInfo
+    updateBoatInfo,
+    changeBoatStatus,
+    deleteBoatInfo
 } from "./boat-info.controller.js";
 import multer from 'multer';
 import path from 'path';
@@ -43,6 +47,7 @@ const uploadBoatImages = multer({
         // const fileType = /jpeg|jpg|png|gif|mp4|avi/;
         const extension = file.originalname.substring(file.originalname.lastIndexOf('.') + 1);
         const mimetype = fileType.test(file.mimetype);
+        file.filepath = '/boat-info/'
 
         if (mimetype && extension) {
             return cb(null, true);
@@ -53,6 +58,10 @@ const uploadBoatImages = multer({
 })
 
 boatInfoRouter.get("/getBoatInfoAll", getBoatInfoAll)
+boatInfoRouter.get("/getActiveBoatInfoAll", getActiveBoatInfoAll)
+boatInfoRouter.get("/getBoatInfoAllByType", getBoatInfoAllByType)
 boatInfoRouter.get("/getBoatInfoById", getBoatInfoById)
 boatInfoRouter.post("/insertBoatInfo", checkJWT, uploadBoatImages.fields([{name: 'cover_image', maxCount: 1}, {name: 'boat_images', maxCount: 20}]), insertBoatInfo)
 boatInfoRouter.post("/updateBoatInfo", checkJWT, uploadBoatImages.fields([{name: 'cover_image', maxCount: 1}, {name: 'boat_images', maxCount: 20}]), updateBoatInfo)
+boatInfoRouter.post("/changeBoatStatus", checkJWT, changeBoatStatus)
+boatInfoRouter.delete("/deleteBoatInfo", checkJWT, deleteBoatInfo)

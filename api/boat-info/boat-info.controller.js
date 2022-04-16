@@ -6,7 +6,88 @@ import { response } from "express";
 // get all boat-info data
 export const getBoatInfoAll = async (req, res) => {
     try {
-        const data = await BoatInfo.find();
+        const data = await BoatInfo.find().select([
+            'cover_image',
+            'boat_type',
+            'boat_info.name',
+            'boat_info.width',
+            'boat_info.manufacturer',
+            'boat_info.mfg_year',
+            'boat_info.mfg_year',
+            'status'
+        ]);
+        if (data <= 0) {
+            res.status(401).send({
+                success: false,
+                message: 'boat-info data not found'
+            })
+        }
+        else {
+            res.status(200).send({
+                success: true,
+                data: data,
+                length: data.length,
+                message: 'boat-info data fetched successfully'
+            })
+        }
+    }
+    catch (err) {
+        res.status(401).send({
+            success: false,
+            message: 'boat-info.controller: ' + err.message
+        })
+    }
+}
+
+// get active boat-info data
+export const getActiveBoatInfoAll = async (req, res) => {
+    try {
+        const data = await BoatInfo.find({status: 'active'}).select([
+            'cover_image',
+            'boat_type',
+            'boat_info.name',
+            'boat_info.width',
+            'boat_info.manufacturer',
+            'boat_info.mfg_year',
+            'boat_info.mfg_year',
+            'status'
+        ]);
+        if (data <= 0) {
+            res.status(401).send({
+                success: false,
+                message: 'boat-info data not found'
+            })
+        }
+        else {
+            res.status(200).send({
+                success: true,
+                data: data,
+                length: data.length,
+                message: 'boat-info data fetched successfully'
+            })
+        }
+    }
+    catch (err) {
+        res.status(401).send({
+            success: false,
+            message: 'boat-info.controller: ' + err.message
+        })
+    }
+}
+
+export const getBoatInfoAllByType = async (req, res) => {
+    var btype = decodeURIComponent(req.query?.btype)
+    try {
+        const data = await BoatInfo.find({boat_type: btype, status: 'active'}).select([
+            'cover_image',
+            'boat_type',
+            'boat_info.name',
+            'boat_info.width',
+            'boat_info.manufacturer',
+            'boat_info.mfg_year',
+            'boat_info.mfg_year',
+            'status'
+        ]);
         if (data <= 0) {
             res.status(401).send({
                 success: false,
@@ -72,7 +153,7 @@ export const insertBoatInfo = async (req, res) => {
         const media = req.files
 
         const data = new BoatInfo({
-            cover_image: media.cover_image != undefined ? media.cover_image[0].filename : '',
+            cover_image: media.cover_image != undefined ? media.cover_image[0].filepath + media.cover_image[0].filename : '',
             boat_type: content.boat_type,
             boat_info: {
                 name: content.name,
@@ -86,11 +167,12 @@ export const insertBoatInfo = async (req, res) => {
                 interior: content.interior,
                 exterior: content.exterior,
                 price: content.price,
-            }
+            },
+            status: 'active'
         })
 
         for(let i = 0; i < media.boat_images.length; i++) {
-            data.boat_images.push({name: media.boat_images[i].filename})
+            data.boat_images.push({name: media.boat_images[i].filepath + media.boat_images[i].filename})
         }
 
         // checkUserData(userId);
@@ -123,9 +205,11 @@ export const updateBoatInfo = async (req, res) => {
         const content = req.body
         const media = req.files
 
+        const currentData = await BoatInfo.findById(boat_id).lean().exec();
+
         const data = {
             _id: boat_id,
-            cover_image: media.cover_image != undefined ? media.cover_image[0].filename : '',
+            cover_image: media.cover_image != undefined ? media.cover_image[0].filepath + media.cover_image[0].filename : '',
             boat_type: content.boat_type,
             boat_info: {
                 name: content.name,
@@ -139,11 +223,12 @@ export const updateBoatInfo = async (req, res) => {
                 interior: content.interior,
                 exterior: content.exterior,
                 price: content.price,
-            }
+            },
+            status: currentData.status
         }
 
-        for(let i=0; i<req.files.boat_images; i++) {
-            data.boat_images.push({name: req.files.images[i].filename})
+        for(let i=0; i<media.boat_images; i++) {
+            data.boat_images.push({name: media.images[i].filepath + media.images[i].filename})
         }
 
         // checkUserData(userId);
@@ -154,6 +239,51 @@ export const updateBoatInfo = async (req, res) => {
             success: true,
             data: boatInfoData,
             message: 'boat-info updated successfully',
+        })
+    }
+    catch (err) {
+        res.status(401).send({
+            success: false,
+            message: 'boat-info.controller: ' + err.message
+        });
+    }
+}
+
+// update boat status
+export const changeBoatStatus = async (req, res) => {
+    try {
+        console.log(req.query);
+        const boat_id = req.query.bid
+        const status = req.query.status
+        // checkUserData(userId);
+        const boatInfoData = await BoatInfo.findByIdAndUpdate(boat_id, {$set : {status: status}}, {new: true})
+        // addData(userId, data, "work");
+
+        res.status(201).send({
+            success: true,
+            data: boatInfoData,
+            message: 'boat status changed successfully',
+        })
+    }
+    catch (err) {
+        res.status(401).send({
+            success: false,
+            message: 'boat-info.controller: ' + err.message
+        });
+    }
+}
+
+export const deleteBoatInfo = async (req, res) => {
+    try {
+        const boat_id = req.query.bid
+        // checkUserData(userId);
+        const boatInfoData = await BoatInfo.findByIdAndDelete(boat_id)
+        // addData(userId, data, "work");
+
+        res.status(201).send({
+            success: true,
+            data: boatInfoData,
+            message: 'boat deleted successfully',
         })
     }
     catch (err) {

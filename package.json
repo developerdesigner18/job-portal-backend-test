@@ -5,6 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
+    "prestart": "git pull && npm install",
     "start": "SET NODE_ENV=production && node server.js --unhandled-rejections=strict",
     "dev": "SET NODE_ENV=development && nodemon server.js --unhandled-rejections=strict",
     "test": "echo \"Error: no test specified\" && exit 1"
