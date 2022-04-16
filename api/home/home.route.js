@@ -4,22 +4,22 @@ import {
     updateHomeData,
     getQSpdData,
     updateQSpdData
-} from "./pages.controller.js";
+} from "./home.controller.js";
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
-import { Pages } from "./pages.model.js"
+import { home } from "./home.model.js"
 import { checkJWT } from "../../middleware/check-jwt.js"
 
-export const pagesRouter = express.Router();
+export const homeRouter = express.Router();
 
 // Upload files for Home Page
 var homeStorage = multer.diskStorage({
     destination: async function (req, file, cb) {
         
         const __dirname = path.resolve(path.dirname(''));
-        const homeUploadDir = path.join(__dirname, '.', 'public', 'pages', 'home');
+        const homeUploadDir = path.join(__dirname, '.', 'public', 'home', 'home');
         if (fs.existsSync(homeUploadDir)) {
             cb(null, homeUploadDir)
         }
@@ -46,7 +46,7 @@ const uploadHomeContent = multer({
         // const fileType = /jpeg|jpg|png|gif|mp4|avi/;
         const extension = file.originalname.substring(file.originalname.lastIndexOf('.') + 1);
         const mimetype = fileType.test(file.mimetype);
-        file.filepath = '/pages/home/'
+        file.filepath = '/home/home/'
         
         if (mimetype && extension) {
             return cb(null, true);
@@ -61,7 +61,7 @@ var qSpdStorage = multer.diskStorage({
     destination: async function (req, file, cb) {
         
         const __dirname = path.resolve(path.dirname(''));
-        const qSpdUploadDir = path.join(__dirname, '.', 'public', 'pages', 'q-spd');
+        const qSpdUploadDir = path.join(__dirname, '.', 'public', 'home', 'q-spd');
         if (fs.existsSync(qSpdUploadDir)) {
             cb(null, qSpdUploadDir)
         }
@@ -88,7 +88,7 @@ const uploadQSpdContent = multer({
         // const fileType = /jpeg|jpg|png|gif|mp4|avi/;
         const extension = file.originalname.substring(file.originalname.lastIndexOf('.') + 1);
         const mimetype = fileType.test(file.mimetype);
-        file.filepath = '/pages/q-spd/'
+        file.filepath = '/home/q-spd/'
 
         if (mimetype && extension) {
             return cb(null, true);
@@ -98,7 +98,7 @@ const uploadQSpdContent = multer({
     }
 })
 
-pagesRouter.get("/getHomeData", getHomeData)
-pagesRouter.post("/updateHomeData", checkJWT, uploadHomeContent.fields([{name: 'landing_video', maxCount: 1}, {name: 'image_1', maxCount: 1}]), updateHomeData)
-pagesRouter.get("/getQSpdData", getQSpdData)
-pagesRouter.post("/updateQSpdData", checkJWT, uploadQSpdContent.fields([{name: 'cover_image', maxCount: 1}, {name: 'images', maxCount: 20}]), updateQSpdData)
+homeRouter.get("/getHomeData", getHomeData)
+homeRouter.post("/updateHomeData", checkJWT, uploadHomeContent.fields([{name: 'landing_video', maxCount: 1}, {name: 'image_1', maxCount: 1}]), updateHomeData)
+homeRouter.get("/getQSpdData", getQSpdData)
+homeRouter.post("/updateQSpdData", checkJWT, uploadQSpdContent.fields([{name: 'cover_image', maxCount: 1}, {name: 'images', maxCount: 20}]), updateQSpdData)

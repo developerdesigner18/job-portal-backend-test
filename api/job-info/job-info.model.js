@@ -2,11 +2,11 @@ import mongoose from 'mongoose';
 // import pkg from 'mongoose';
 const { Schema } = mongoose;
 
-const collectionName = 'boat-info'
-const boatInfoSchema = Schema({
+const collectionName = 'job-info'
+const jobInfoSchema = Schema({
     cover_image: String,
-    boat_type: String,
-    boat_info: {
+    job_type: String,
+    job_info: {
         name: String,
         width: String,
         mfg_year: String,
@@ -19,7 +19,7 @@ const boatInfoSchema = Schema({
         exterior: String,
         price: Number,
     },
-    boat_images: [{
+    job_images: [{
         name: String,
     }],
     status: String
@@ -27,4 +27,4 @@ const boatInfoSchema = Schema({
     timestamps: true
 })
 
-export const BoatInfo = mongoose.model('BoatInfo', boatInfoSchema, collectionName)
+export const jobInfo = mongoose.model('jobInfo', jobInfoSchema, collectionName)

@@ -1,25 +1,25 @@
-import { BoatInfo } from "./boat-info.model.js"
+import { jobInfo } from "./job-info.model.js"
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import { response } from "express";
 
-// get all boat-info data
-export const getBoatInfoAll = async (req, res) => {
+// get all job-info data
+export const getjobInfoAll = async (req, res) => {
     try {
-        const data = await BoatInfo.find().select([
+        const data = await jobInfo.find().select([
             'cover_image',
-            'boat_type',
-            'boat_info.name',
-            'boat_info.width',
-            'boat_info.manufacturer',
-            'boat_info.mfg_year',
-            'boat_info.mfg_year',
+            'job_type',
+            'job_info.name',
+            'job_info.width',
+            'job_info.manufacturer',
+            'job_info.mfg_year',
+            'job_info.mfg_year',
             'status'
         ]);
         if (data <= 0) {
             res.status(401).send({
                 success: false,
-                message: 'boat-info data not found'
+                message: 'job-info data not found'
             })
         }
         else {
@@ -27,35 +27,35 @@ export const getBoatInfoAll = async (req, res) => {
                 success: true,
                 data: data,
                 length: data.length,
-                message: 'boat-info data fetched successfully'
+                message: 'job-info data fetched successfully'
             })
         }
     }
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'boat-info.controller: ' + err.message
+            message: 'job-info.controller: ' + err.message
         })
     }
 }
 
-// get active boat-info data
-export const getActiveBoatInfoAll = async (req, res) => {
+// get active job-info data
+export const getActivejobInfoAll = async (req, res) => {
     try {
-        const data = await BoatInfo.find({status: 'active'}).select([
+        const data = await jobInfo.find({status: 'active'}).select([
             'cover_image',
-            'boat_type',
-            'boat_info.name',
-            'boat_info.width',
-            'boat_info.manufacturer',
-            'boat_info.mfg_year',
-            'boat_info.mfg_year',
+            'job_type',
+            'job_info.name',
+            'job_info.width',
+            'job_info.manufacturer',
+            'job_info.mfg_year',
+            'job_info.mfg_year',
             'status'
         ]);
         if (data <= 0) {
             res.status(401).send({
                 success: false,
-                message: 'boat-info data not found'
+                message: 'job-info data not found'
             })
         }
         else {
@@ -63,35 +63,35 @@ export const getActiveBoatInfoAll = async (req, res) => {
                 success: true,
                 data: data,
                 length: data.length,
-                message: 'boat-info data fetched successfully'
+                message: 'job-info data fetched successfully'
             })
         }
     }
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'boat-info.controller: ' + err.message
+            message: 'job-info.controller: ' + err.message
         })
     }
 }
 
-export const getBoatInfoAllByType = async (req, res) => {
+export const getjobInfoAllByType = async (req, res) => {
     var btype = decodeURIComponent(req.query?.btype)
     try {
-        const data = await BoatInfo.find({boat_type: btype, status: 'active'}).select([
+        const data = await jobInfo.find({job_type: btype, status: 'active'}).select([
             'cover_image',
-            'boat_type',
-            'boat_info.name',
-            'boat_info.width',
-            'boat_info.manufacturer',
-            'boat_info.mfg_year',
-            'boat_info.mfg_year',
+            'job_type',
+            'job_info.name',
+            'job_info.width',
+            'job_info.manufacturer',
+            'job_info.mfg_year',
+            'job_info.mfg_year',
             'status'
         ]);
         if (data <= 0) {
             res.status(401).send({
                 success: false,
-                message: 'boat-info data not found'
+                message: 'job-info data not found'
             })
         }
         else {
@@ -99,28 +99,28 @@ export const getBoatInfoAllByType = async (req, res) => {
                 success: true,
                 data: data,
                 length: data.length,
-                message: 'boat-info data fetched successfully'
+                message: 'job-info data fetched successfully'
             })
         }
     }
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'boat-info.controller: ' + err.message
+            message: 'job-info.controller: ' + err.message
         })
     }
 }
 
-// get boat-info data by id
-export const getBoatInfoById = async (req, res) => {
+// get job-info data by id
+export const getjobInfoById = async (req, res) => {
     try {
-        const boat_id = req.query.bid
+        const job_id = req.query.bid
 
-        const data = await BoatInfo.findById(boat_id);
+        const data = await jobInfo.findById(job_id);
         if (data <= 0) {
             res.status(401).send({
                 success: false,
-                message: 'boat-info data not found'
+                message: 'job-info data not found'
             })
         }
         else {
@@ -128,20 +128,20 @@ export const getBoatInfoById = async (req, res) => {
                 success: true,
                 data: data,
                 length: data.length,
-                message: 'boat-info data fetched successfully'
+                message: 'job-info data fetched successfully'
             })
         }
     }
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'boat-info.controller: ' + err.message
+            message: 'job-info.controller: ' + err.message
         })
     }
 }
 
-// insert boat-info page data
-export const insertBoatInfo = async (req, res) => {
+// insert job-info page data
+export const insertjobInfo = async (req, res) => {
     try {
         // const { userId } = req.body;
         // const { company, position, city, description, fromdate, todate } = req.body
@@ -152,10 +152,10 @@ export const insertBoatInfo = async (req, res) => {
         const content = req.body
         const media = req.files
 
-        const data = new BoatInfo({
+        const data = new jobInfo({
             cover_image: media.cover_image != undefined ? media.cover_image[0].filepath + media.cover_image[0].filename : '',
-            boat_type: content.boat_type,
-            boat_info: {
+            job_type: content.job_type,
+            job_info: {
                 name: content.name,
                 width: content.width,
                 mfg_year: content.mfg_year,
@@ -171,47 +171,47 @@ export const insertBoatInfo = async (req, res) => {
             status: 'active'
         })
 
-        for(let i = 0; i < media.boat_images.length; i++) {
-            data.boat_images.push({name: media.boat_images[i].filepath + media.boat_images[i].filename})
+        for(let i = 0; i < media.job_images.length; i++) {
+            data.job_images.push({name: media.job_images[i].filepath + media.job_images[i].filename})
         }
 
         // checkUserData(userId);
-        const boatInfoData = await BoatInfo.create(data)
+        const jobInfoData = await jobInfo.create(data)
         // addData(userId, data, "work");
 
         res.status(201).send({
             success: true,
-            data: boatInfoData,
-            message: 'boat-info inserted successfully',
+            data: jobInfoData,
+            message: 'job-info inserted successfully',
         })
     }
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'boat-info.controller: ' + err.message
+            message: 'job-info.controller: ' + err.message
         });
     }
 }
 
-// update boat-info page data
-export const updateBoatInfo = async (req, res) => {
+// update job-info page data
+export const updatejobInfo = async (req, res) => {
     try {
         // const { userId } = req.body;
         // const { company, position, city, description, fromdate, todate } = req.body
         // var data = content;
         // const home = new Home(data);
         // home.save()
-        const boat_id = req.query.bid
+        const job_id = req.query.bid
         const content = req.body
         const media = req.files
 
-        const currentData = await BoatInfo.findById(boat_id).lean().exec();
+        const currentData = await jobInfo.findById(job_id).lean().exec();
 
         const data = {
-            _id: boat_id,
+            _id: job_id,
             cover_image: media.cover_image != undefined ? media.cover_image[0].filepath + media.cover_image[0].filename : '',
-            boat_type: content.boat_type,
-            boat_info: {
+            job_type: content.job_type,
+            job_info: {
                 name: content.name,
                 width: content.width,
                 mfg_year: content.mfg_year,
@@ -227,69 +227,69 @@ export const updateBoatInfo = async (req, res) => {
             status: currentData.status
         }
 
-        for(let i=0; i<media.boat_images; i++) {
-            data.boat_images.push({name: media.images[i].filepath + media.images[i].filename})
+        for(let i=0; i<media.job_images; i++) {
+            data.job_images.push({name: media.images[i].filepath + media.images[i].filename})
         }
 
         // checkUserData(userId);
-        const boatInfoData = await BoatInfo.findByIdAndUpdate(boat_id, data, {new: true})
+        const jobInfoData = await jobInfo.findByIdAndUpdate(job_id, data, {new: true})
         // addData(userId, data, "work");
 
         res.status(201).send({
             success: true,
-            data: boatInfoData,
-            message: 'boat-info updated successfully',
+            data: jobInfoData,
+            message: 'job-info updated successfully',
         })
     }
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'boat-info.controller: ' + err.message
+            message: 'job-info.controller: ' + err.message
         });
     }
 }
 
-// update boat status
-export const changeBoatStatus = async (req, res) => {
+// update job status
+export const changejobStatus = async (req, res) => {
     try {
         console.log(req.query);
-        const boat_id = req.query.bid
+        const job_id = req.query.bid
         const status = req.query.status
         // checkUserData(userId);
-        const boatInfoData = await BoatInfo.findByIdAndUpdate(boat_id, {$set : {status: status}}, {new: true})
+        const jobInfoData = await jobInfo.findByIdAndUpdate(job_id, {$set : {status: status}}, {new: true})
         // addData(userId, data, "work");
 
         res.status(201).send({
             success: true,
-            data: boatInfoData,
-            message: 'boat status changed successfully',
+            data: jobInfoData,
+            message: 'job status changed successfully',
         })
     }
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'boat-info.controller: ' + err.message
+            message: 'job-info.controller: ' + err.message
         });
     }
 }
 
-export const deleteBoatInfo = async (req, res) => {
+export const deletejobInfo = async (req, res) => {
     try {
-        const boat_id = req.query.bid
+        const job_id = req.query.bid
         // checkUserData(userId);
-        const boatInfoData = await BoatInfo.findByIdAndDelete(boat_id)
+        const jobInfoData = await jobInfo.findByIdAndDelete(job_id)
         // addData(userId, data, "work");
 
         res.status(201).send({
             success: true,
-            data: boatInfoData,
-            message: 'boat deleted successfully',
+            data: jobInfoData,
+            message: 'job deleted successfully',
         })
     }
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'boat-info.controller: ' + err.message
+            message: 'job-info.controller: ' + err.message
         });
     }
 }

@@ -1,4 +1,4 @@
-import { Pages } from "./pages.model.js"
+import { home } from "./home.model.js"
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import { response } from "express";
@@ -6,7 +6,7 @@ import { response } from "express";
 // get all home page data
 export const getHomeData = async (req, res) => {
     try {
-        const data = await Pages.findOne({page: "Home"});
+        const data = await home.findOne({page: "Home"});
         if (data <= 0) {
             res.status(401).send({
                 success: false,
@@ -25,7 +25,7 @@ export const getHomeData = async (req, res) => {
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'pages.controller: home' + err.message
+            message: 'home.controller: home' + err.message
         })
     }
 }
@@ -42,7 +42,7 @@ export const updateHomeData = async (req, res) => {
         const content = req.body
         const media = req.files
 
-        const currentData = await Pages.findById(page_id).lean().exec();
+        const currentData = await home.findById(page_id).lean().exec();
         let landing_video;
         let image_1;
         media.landing_video ? landing_video = media.landing_video != undefined ? media.landing_video[0].filepath + media.landing_video[0].filename : ''
@@ -67,7 +67,7 @@ export const updateHomeData = async (req, res) => {
         };
 
         // checkUserData(userId);
-        const homeData = await Pages.findByIdAndUpdate(page_id, data, {new: true})
+        const homeData = await home.findByIdAndUpdate(page_id, data, {new: true})
         // addData(userId, data, "work");
 
         res.status(201).send({
@@ -79,7 +79,7 @@ export const updateHomeData = async (req, res) => {
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'pages.controller: home' + err.message
+            message: 'home.controller: home' + err.message
         });
     }
 }
@@ -87,7 +87,7 @@ export const updateHomeData = async (req, res) => {
 // get all q-spd page data
 export const getQSpdData = async (req, res) => {
     try {
-        const data = await Pages.findOne({page: "Q-Spd"});
+        const data = await home.findOne({page: "Q-Spd"});
         if (data <= 0) {
             res.status(401).send({
                 success: false,
@@ -106,7 +106,7 @@ export const getQSpdData = async (req, res) => {
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'pages.controller: q-spd' + err.message
+            message: 'home.controller: q-spd' + err.message
         })
     }
 }
@@ -133,7 +133,7 @@ export const updateQSpdData = async (req, res) => {
         }
 
         // checkUserData(userId);
-        const qSpdData = await Pages.findByIdAndUpdate(page_id, data, {new: true})
+        const qSpdData = await home.findByIdAndUpdate(page_id, data, {new: true})
         // addData(userId, data, "work");
 
         res.status(201).send({
@@ -145,7 +145,7 @@ export const updateQSpdData = async (req, res) => {
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'pages.controller: q-spd' + err.message
+            message: 'home.controller: q-spd' + err.message
         });
     }
 }
