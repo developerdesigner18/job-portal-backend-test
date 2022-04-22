@@ -1,12 +1,12 @@
-import { jobInfo } from "./job-info.model.js"
+import { jobinfo } from "./job-info.model.js"
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import { response } from "express";
 
 // get all job-info data
-export const getjobInfoAll = async (req, res) => {
+export const getjobinfoAll = async (req, res) => {
     try {
-        const data = await jobInfo.find().select([
+        const data = await jobinfo.find().select([
             'cover_image',
             'job_type',
             'job_info.name',
@@ -40,9 +40,9 @@ export const getjobInfoAll = async (req, res) => {
 }
 
 // get active job-info data
-export const getActivejobInfoAll = async (req, res) => {
+export const getActivejobinfoAll = async (req, res) => {
     try {
-        const data = await jobInfo.find({status: 'active'}).select([
+        const data = await jobinfo.find({status: 'active'}).select([
             'cover_image',
             'job_type',
             'job_info.name',
@@ -75,10 +75,10 @@ export const getActivejobInfoAll = async (req, res) => {
     }
 }
 
-export const getjobInfoAllByType = async (req, res) => {
+export const getjobinfoAllByType = async (req, res) => {
     var btype = decodeURIComponent(req.query?.btype)
     try {
-        const data = await jobInfo.find({job_type: btype, status: 'active'}).select([
+        const data = await jobinfo.find({job_type: btype, status: 'active'}).select([
             'cover_image',
             'job_type',
             'job_info.name',
@@ -112,11 +112,11 @@ export const getjobInfoAllByType = async (req, res) => {
 }
 
 // get job-info data by id
-export const getjobInfoById = async (req, res) => {
+export const getjobinfoById = async (req, res) => {
     try {
         const job_id = req.query.bid
 
-        const data = await jobInfo.findById(job_id);
+        const data = await jobinfo.findById(job_id);
         if (data <= 0) {
             res.status(401).send({
                 success: false,
@@ -141,7 +141,7 @@ export const getjobInfoById = async (req, res) => {
 }
 
 // insert job-info page data
-export const insertjobInfo = async (req, res) => {
+export const insertjobinfo = async (req, res) => {
     try {
         // const { userId } = req.body;
         // const { company, position, city, description, fromdate, todate } = req.body
@@ -152,7 +152,7 @@ export const insertjobInfo = async (req, res) => {
         const content = req.body
         const media = req.files
 
-        const data = new jobInfo({
+        const data = new jobinfo({
             cover_image: media.cover_image != undefined ? media.cover_image[0].filepath + media.cover_image[0].filename : '',
             job_type: content.job_type,
             job_info: {
@@ -171,17 +171,18 @@ export const insertjobInfo = async (req, res) => {
             status: 'active'
         })
 
+        
         for(let i = 0; i < media.job_images.length; i++) {
             data.job_images.push({name: media.job_images[i].filepath + media.job_images[i].filename})
         }
-
+        
         // checkUserData(userId);
-        const jobInfoData = await jobInfo.create(data)
+        const jobinfoData = await jobinfo.create(data)
         // addData(userId, data, "work");
 
         res.status(201).send({
             success: true,
-            data: jobInfoData,
+            data: jobinfoData,
             message: 'job-info inserted successfully',
         })
     }
@@ -194,7 +195,7 @@ export const insertjobInfo = async (req, res) => {
 }
 
 // update job-info page data
-export const updatejobInfo = async (req, res) => {
+export const updatejobinfo = async (req, res) => {
     try {
         // const { userId } = req.body;
         // const { company, position, city, description, fromdate, todate } = req.body
@@ -205,11 +206,14 @@ export const updatejobInfo = async (req, res) => {
         const content = req.body
         const media = req.files
 
-        const currentData = await jobInfo.findById(job_id).lean().exec();
-
+        const currentData = await jobinfo.findById(job_id).lean().exec();
+        let cover_image;
+        cover_image = media.cover_image != undefined
+                        ? media.cover_image[0].filepath + media.cover_image[0].filename
+                        : currentData.cover_image;
         const data = {
             _id: job_id,
-            cover_image: media.cover_image != undefined ? media.cover_image[0].filepath + media.cover_image[0].filename : '',
+            cover_image: cover_image,
             job_type: content.job_type,
             job_info: {
                 name: content.name,
@@ -227,17 +231,28 @@ export const updatejobInfo = async (req, res) => {
             status: currentData.status
         }
 
-        for(let i=0; i<media.job_images; i++) {
-            data.job_images.push({name: media.images[i].filepath + media.images[i].filename})
-        }
-
+        // data.job_images = []
+        // console.log('media.job_images.length', media.job_images.length);
+        // for(let i=0; i<media.job_images.length; i++) {
+        //     console.log('################', media.job_images[i]);
+        //     data.job_images.push({name: media.job_images[i].filepath + media.job_images[i].filename})
+        // }
+        // console.log('-=-=-=-==-=-', data.job_images);
         // checkUserData(userId);
-        const jobInfoData = await jobInfo.findByIdAndUpdate(job_id, data, {new: true})
+        let jobinfoData;
+        if (media?.job_images) {
+            for(let i= 0; i< media.job_images.length;i++) {
+                jobinfoData = await jobinfo.findByIdAndUpdate(job_id, {$push: {job_images: {"name": media.job_images[i].filepath + media.job_images[i].filename }}}, {new: true})
+            }
+        } else {
+            jobinfoData = await jobinfo.findByIdAndUpdate(job_id, data, {new: true})
+        }
+        
         // addData(userId, data, "work");
 
         res.status(201).send({
             success: true,
-            data: jobInfoData,
+            data: jobinfoData,
             message: 'job-info updated successfully',
         })
     }
@@ -256,12 +271,12 @@ export const changejobStatus = async (req, res) => {
         const job_id = req.query.bid
         const status = req.query.status
         // checkUserData(userId);
-        const jobInfoData = await jobInfo.findByIdAndUpdate(job_id, {$set : {status: status}}, {new: true})
+        const jobinfoData = await jobinfo.findByIdAndUpdate(job_id, {$set : {status: status}}, {new: true})
         // addData(userId, data, "work");
 
         res.status(201).send({
             success: true,
-            data: jobInfoData,
+            data: jobinfoData,
             message: 'job status changed successfully',
         })
     }
@@ -273,16 +288,40 @@ export const changejobStatus = async (req, res) => {
     }
 }
 
-export const deletejobInfo = async (req, res) => {
+// delete single image from job
+export const deletejobImage = async (req, res) => {
     try {
         const job_id = req.query.bid
+        const image_id = req.query.iid
         // checkUserData(userId);
-        const jobInfoData = await jobInfo.findByIdAndDelete(job_id)
+        const jobinfoData = await jobinfo.findByIdAndUpdate(job_id, {$pull : {job_images: {_id : image_id}}}, {new: true})
         // addData(userId, data, "work");
 
         res.status(201).send({
             success: true,
-            data: jobInfoData,
+            data: jobinfoData,
+            message: 'job image deleted successfully',
+        })
+    }
+    catch (err) {
+        res.status(401).send({
+            success: false,
+            message: 'job-info.controller: ' + err.message
+        });
+    }
+}
+
+// delete job info
+export const deletejobinfo = async (req, res) => {
+    try {
+        const job_id = req.query.bid
+        // checkUserData(userId);
+        const jobinfoData = await jobinfo.findByIdAndDelete(job_id)
+        // addData(userId, data, "work");
+
+        res.status(201).send({
+            success: true,
+            data: jobinfoData,
             message: 'job deleted successfully',
         })
     }

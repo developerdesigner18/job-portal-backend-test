@@ -20,6 +20,20 @@ let server = null;
 const __dirname = path.resolve(path.dirname(''));
 // require("dotenv").config()
 
+mongoose.connect(
+    config.DB_URL,
+    {
+        useUnifiedTopology: true,
+        useNewUrlParser: true
+    }
+)
+.then(() => {
+    console.log('DB Connected Successfully!'.green)
+})
+.catch((err) => {
+    console.log(`Error: ${err}`.red.inverse);
+})
+
 app.use(cors())
 app.use(morgan('dev'));
 app.use(cookieParser());
@@ -66,20 +80,6 @@ if (config.NODE_ENV === "development") {
     console.log("This is the production environment".inverse.yellow)
     server = http.createServer(app)
 }
-
-mongoose.connect(
-    config.DB_URL,
-    {
-        useUnifiedTopology: true,
-        useNewUrlParser: true
-    }
-)
-.then(() => {
-    console.log('DB Connected Successfully!'.green)
-})
-.catch((err) => {
-    console.log(`Error: ${err}`.red.inverse);
-})
 
 let PORT = config.PORT || 8000;
 server.listen(PORT, async () => {

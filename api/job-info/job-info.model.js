@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const collectionName = 'job-info'
-const jobInfoSchema = Schema({
+const jobinfoSchema = Schema({
     cover_image: String,
     job_type: String,
     job_info: {
@@ -27,4 +27,4 @@ const jobInfoSchema = Schema({
     timestamps: true
 })
 
-export const jobInfo = mongoose.model('jobInfo', jobInfoSchema, collectionName)
+export const jobinfo = mongoose.model('jobinfo', jobinfoSchema, collectionName)

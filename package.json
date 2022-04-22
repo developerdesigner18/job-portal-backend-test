@@ -5,9 +5,9 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "prestart": "git pull && npm install",
-    "start": "SET NODE_ENV=production && node server.js --unhandled-rejections=strict",
-    "dev": "SET NODE_ENV=development && nodemon server.js --unhandled-rejections=strict",
+    "update": "git pull && npm ci",
+    "start": "export NODE_ENV=\"production\" && node server.js --unhandled-rejections=strict",
+    "dev": "cross-env NODE_ENV=\"development\" && nodemon server.js --unhandled-rejections=strict",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -15,7 +15,8 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-preset-env": "^1.6.1"
+    "babel-preset-env": "^1.6.1",
+    "cross-env": "^7.0.3"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",

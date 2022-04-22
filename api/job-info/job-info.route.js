@@ -1,47 +1,48 @@
 import express from "express";
 import {
-    getjobInfoAll,
-    getActivejobInfoAll,
-    getjobInfoAllByType,
-    getjobInfoById,
-    insertjobInfo,
-    updatejobInfo,
+    getjobinfoAll,
+    getActivejobinfoAll,
+    getjobinfoAllByType,
+    getjobinfoById,
+    insertjobinfo,
+    updatejobinfo,
     changejobStatus,
-    deletejobInfo
+    deletejobImage,
+    deletejobinfo
 } from "./job-info.controller.js";
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
-import { jobInfo } from "./job-info.model.js"
+import { jobinfo } from "./job-info.model.js"
 import { checkJWT } from "../../middleware/check-jwt.js"
 
 export const jobinfoRouter = express.Router();
 
-var jobInfoStorage = multer.diskStorage({
+var jobinfoStorage = multer.diskStorage({
     destination: async function (req, file, cb) {
         
         const __dirname = path.resolve(path.dirname(''));
-        const jobInfoUploadDir = path.join(__dirname, '.', 'public', 'job-info');
-        if (fs.existsSync(jobInfoUploadDir)) {
-            cb(null, jobInfoUploadDir)
+        const jobinfoUploadDir = path.join(__dirname, '.', 'public', 'job-info');
+        if (fs.existsSync(jobinfoUploadDir)) {
+            cb(null, jobinfoUploadDir)
         }
         else {
-            fs.mkdirSync(jobInfoUploadDir, { recursive: true })
-            cb(null, jobInfoUploadDir)
+            fs.mkdirSync(jobinfoUploadDir, { recursive: true })
+            cb(null, jobinfoUploadDir)
         }
     },
 
     filename: async function (req, file, cb) {
         // const decoded = await jwt.verify(req.headers.token, configKey.secrets.JWT_SECRET);
-            // const data = await jobInfo.findOne({ page: "Home" })
+            // const data = await jobinfo.findOne({ page: "Home" })
             const extension = file.originalname.substring(file.originalname.lastIndexOf('.'));
             cb(null, Math.random().toString(36).substring(2, 15) + "_" + Date.now() + extension)
     }
 })
 
 const uploadjobImages = multer({
-    storage: jobInfoStorage,
+    storage: jobinfoStorage,
     fileFilter: function (req, file, cb) {
         const fileType = /jpeg|jpg|png/;
         // const fileType = /jpeg|jpg|png|gif|mp4|avi/;
@@ -57,11 +58,12 @@ const uploadjobImages = multer({
     }
 })
 
-jobinfoRouter.get("/getjobInfoAll", getjobInfoAll)
-jobinfoRouter.get("/getActivejobInfoAll", getActivejobInfoAll)
-jobinfoRouter.get("/getjobInfoAllByType", getjobInfoAllByType)
-jobinfoRouter.get("/getjobInfoById", getjobInfoById)
-jobinfoRouter.post("/insertjobInfo", checkJWT, uploadjobImages.fields([{name: 'cover_image', maxCount: 1}, {name: 'job_images', maxCount: 20}]), insertjobInfo)
-jobinfoRouter.post("/updatejobInfo", checkJWT, uploadjobImages.fields([{name: 'cover_image', maxCount: 1}, {name: 'job_images', maxCount: 20}]), updatejobInfo)
+jobinfoRouter.get("/getjobinfoAll", getjobinfoAll)
+jobinfoRouter.get("/getActivejobinfoAll", getActivejobinfoAll)
+jobinfoRouter.get("/getjobinfoAllByType", getjobinfoAllByType)
+jobinfoRouter.get("/getjobinfoById", getjobinfoById)
+jobinfoRouter.post("/insertjobinfo", checkJWT, uploadjobImages.fields([{name: 'cover_image', maxCount: 1}, {name: 'job_images', maxCount: 20}]), insertjobinfo)
+jobinfoRouter.post("/updatejobinfo", checkJWT, uploadjobImages.fields([{name: 'cover_image', maxCount: 1}, {name: 'job_images', maxCount: 20}]), updatejobinfo)
 jobinfoRouter.post("/changejobStatus", checkJWT, changejobStatus)
-jobinfoRouter.delete("/deletejobInfo", checkJWT, deletejobInfo)
+jobinfoRouter.delete("/deletejobImage", checkJWT, deletejobImage)
+jobinfoRouter.delete("/deletejobinfo", checkJWT, deletejobinfo)
