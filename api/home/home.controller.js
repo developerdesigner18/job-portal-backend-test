@@ -53,6 +53,9 @@ export const updateHomeData = async (req, res) => {
             media: {
                 landing_video: landing_video,
                 image_1: image_1
+
+
+                
             },
             content: {
                 tag_line: content.tag_line,
