@@ -46,9 +46,9 @@ export const updateHomeData = async (req, res) => {
         let landing_video;
         let image_1;
         media.landing_video ? landing_video = media.landing_video != undefined ? media.landing_video[0].filepath + media.landing_video[0].filename : ''
-                            : landing_video = currentData.media.landing_video
+                            : landing_video = currentData.media?.landing_video
         media.image_1 ? image_1 = media.image_1 != undefined ? media.image_1[0].filepath + media.image_1[0].filename : ''
-                      : image_1 = currentData.media.image_1
+                      : image_1 = currentData.media?.image_1
         const data = {
             media: {
                 landing_video: landing_video,
