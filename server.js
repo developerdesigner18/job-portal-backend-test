@@ -42,7 +42,7 @@ app.use(bodyParser.json({ limit: "100mb" }));
 // app.use(helmet({ crossOriginResourcePolicy: { policy: "same-site" } }));
 
 app.get('/api/health', (req, res) => {
-    res.send('Yacht-Charter App server is alive!');
+    res.send('job-portal App server is alive!');
 })
 
 // app.all('*', function(req, res, next) {
