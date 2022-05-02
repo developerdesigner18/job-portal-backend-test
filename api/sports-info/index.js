@@ -1,2 +1,2 @@
-export * from "./job-info.model.js";
-export * from "./job-info.route.js";
+export * from "./sports-info.model.js";
+export * from "./sports-info.route.js";
