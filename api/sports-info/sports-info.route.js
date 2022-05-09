@@ -4,8 +4,10 @@ import path from 'path';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
 import { checkJWT } from "../../middleware/check-jwt.js"
-
-export const sportsinfo = express.Router();
+import {
+    insertsportsinfo
+} from "./sports-info.controller.js";
+export const sportsinfoRouter = express.Router();
 
 var sportsinfoStorage = multer.diskStorage({
     destination: async function (req, file, cb) {
@@ -46,3 +48,4 @@ const uploadsportsImages = multer({
     }
 })
 
+sportsinfoRouter.post("/insertbloginfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image', maxCount: 1}, {name: 'job_images', maxCount: 20}]), insertsportsinfo)
