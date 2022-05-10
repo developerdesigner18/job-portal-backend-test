@@ -9,7 +9,7 @@ const sportsschema = Schema({
         name: String,
         description: String,
     },
-    // user: {type: Schema.Types.ObjectId, ref: "UserInfo"},
+    user: {type: Schema.Types.ObjectId, ref: "UserInfo"},
 }, {
     timestamps: true
 })

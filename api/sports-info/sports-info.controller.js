@@ -15,6 +15,7 @@ export const insertsportsinfo = async (req, res) => {
                 name: content.name,
                 description:content.description
             },
+            user:content.user
             
         })      
         const sportsinfoData = await sportsinfo.create(data)
