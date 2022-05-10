@@ -5,7 +5,8 @@ import fs from 'fs';
 import jwt from 'jsonwebtoken';
 import { checkJWT } from "../../middleware/check-jwt.js"
 import {
-    insertsportsinfo
+    insertsportsinfo,
+    updateBlogInfo
 } from "./sports-info.controller.js";
 export const sportsinfoRouter = express.Router();
 
@@ -48,4 +49,5 @@ const uploadsportsImages = multer({
     }
 })
 
-sportsinfoRouter.post("/insertbloginfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image', maxCount: 1}, {name: 'job_images', maxCount: 20}]), insertsportsinfo)
+sportsinfoRouter.post("/insertbloginfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image', maxCount: 1}]), insertsportsinfo)
+sportsinfoRouter.post("/updatebloginfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image', maxCount: 1}]), updateBlogInfo)
