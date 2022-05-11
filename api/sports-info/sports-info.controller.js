@@ -2,8 +2,8 @@ import { sportsinfo } from "./sports-info.model.js"
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import { response } from "express";
-// insert sports-info
-export const insertsportsinfo = async (req, res) => {
+
+export const insertbloginfo = async (req, res) => {
     try {
 
         const content = req.body
@@ -66,7 +66,38 @@ export const updateBlogInfo = async (req, res) => {
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'boat-info.controller: ' + err.message
+            message: 'blog-info.controller: ' + err.message
         });
+    }
+}
+
+export const getBlogInfoAll = async (req, res) => {
+    try {
+        const data = await BoatInfo.find().select([
+            'cover_image',
+            'boat_info.name',
+            'boat_info.description',
+            'user'
+        ]);
+        if (data <= 0) {
+            res.status(401).send({
+                success: false,
+                message: 'boat-info data not found'
+            })
+        }
+        else {
+            res.status(200).send({
+                success: true,
+                data: data,
+                length: data.length,
+                message: 'boat-info data fetched successfully'
+            })
+        }
+    }
+    catch (err) {
+        res.status(401).send({
+            success: false,
+            message: 'boat-info.controller: ' + err.message
+        })
     }
 }
