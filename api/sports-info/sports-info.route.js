@@ -6,7 +6,16 @@ import jwt from 'jsonwebtoken';
 import { checkJWT } from "../../middleware/check-jwt.js"
 import {
     insertbloginfo,
-    updateBlogInfo
+    updateBlogInfo,
+    getBlogInfoAll,
+    deleteBlogInfo,
+    getbloginfobyid,
+    inserttravelinfo,
+    updateTravelInfo,
+    getTravelInfoAll,
+    getTravelinfobyid,
+    deleteTravelInfo
+
 } from "./sports-info.controller.js";
 export const sportsinfoRouter = express.Router();
 
@@ -49,5 +58,19 @@ const uploadsportsImages = multer({
     }
 })
 
+// Blog info apis
+
 sportsinfoRouter.post("/insertbloginfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image', maxCount: 1}]), insertbloginfo)
 sportsinfoRouter.post("/updatebloginfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image', maxCount: 1}]), updateBlogInfo)
+sportsinfoRouter.get("/getBlogInfoAll", checkJWT, getBlogInfoAll)
+sportsinfoRouter.get("/getbloginfobyid", checkJWT, getbloginfobyid)
+sportsinfoRouter.post("/deleteBlogInfo", checkJWT, deleteBlogInfo)
+
+
+// Travel Info apis
+
+sportsinfoRouter.post("/inserttravelinfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image_travel', maxCount: 1}]), inserttravelinfo)
+sportsinfoRouter.post("/updateTravelInfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image_travel', maxCount: 1}]), updateTravelInfo)
+sportsinfoRouter.get("/getTravelInfoAll", checkJWT, getTravelInfoAll)
+sportsinfoRouter.get("/getTravelinfobyid", checkJWT, getTravelinfobyid)
+sportsinfoRouter.post("/deleteTravelInfo", checkJWT, deleteTravelInfo)
