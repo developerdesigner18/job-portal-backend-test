@@ -16,11 +16,11 @@ export const insertbloginfo = async (req, res) => {
             cover_image: media.cover_image != undefined ? media.cover_image[0].filepath + media.cover_image[0].filename : '',
             blog_info: {
                 name: content.name,
-                description:content.description
+                description: content.description
             },
-            user:content.user
-            
-        })      
+            user: content.user
+
+        })
         const sportsinfoData = await sportsinfo.create(data)
         res.status(201).send({
             success: true,
@@ -47,19 +47,19 @@ export const updateBlogInfo = async (req, res) => {
         const currentData = await sportsinfo.findById(blog_id).lean().exec();
         let cover_image;
         cover_image = media.cover_image != undefined
-                        ? media.cover_image[0].filepath + media.cover_image[0].filename
-                        : currentData.cover_image;
+            ? media.cover_image[0].filepath + media.cover_image[0].filename
+            : currentData.cover_image;
         const data = {
             _id: blog_id,
             cover_image: cover_image,
             blog_info: {
                 name: content.name,
-                description:content.description
+                description: content.description
             },
         }
         let bloginfodata = []
-        bloginfodata = await sportsinfo.findByIdAndUpdate(blog_id, data, {new: true})
-        
+        bloginfodata = await sportsinfo.findByIdAndUpdate(blog_id, data, { new: true })
+
         res.status(201).send({
             success: true,
             data: bloginfodata,
@@ -139,6 +139,16 @@ export const deleteBlogInfo = async (req, res) => {
     try {
         const blog_id = req.query.bid
         const bloginfoData = await sportsinfo.findByIdAndDelete(blog_id)
+        // const fs = require("fs")
+        // const pathToFile = "/sports-info/"
+
+        // fs.unlink(pathToFile, function (err) {
+        //     if (err) {
+        //         throw err
+        //     } else {
+        //         console.log("Successfully deleted the file.")
+        //     }
+        // })
 
         res.status(201).send({
             success: true,
@@ -168,11 +178,11 @@ export const inserttravelinfo = async (req, res) => {
             cover_image_travel: media.cover_image_travel != undefined ? media.cover_image_travel[0].filepath + media.cover_image_travel[0].filename : '',
             travel_info: {
                 name: content.name,
-                description:content.description
+                description: content.description
             },
-            user:content.user
-            
-        })      
+            user: content.user
+
+        })
         const sportsinfoData = await sportsinfo.create(data)
         res.status(201).send({
             success: true,
@@ -199,19 +209,19 @@ export const updateTravelInfo = async (req, res) => {
         const currentData = await sportsinfo.findById(travel_id).lean().exec();
         let cover_image_travel;
         cover_image_travel = media.cover_image_travel != undefined
-                        ? media.cover_image_travel[0].filepath + media.cover_image_travel[0].filename
-                        : currentData.cover_image_travel;
+            ? media.cover_image_travel[0].filepath + media.cover_image_travel[0].filename
+            : currentData.cover_image_travel;
         const data = {
             _id: travel_id,
             cover_image_travel: cover_image_travel,
             travel_info: {
                 name: content.name,
-                description:content.description
+                description: content.description
             },
         }
         let travelinfodata = []
-        travelinfodata = await sportsinfo.findByIdAndUpdate(travel_id, data, {new: true})
-        
+        travelinfodata = await sportsinfo.findByIdAndUpdate(travel_id, data, { new: true })
+
         res.status(201).send({
             success: true,
             data: travelinfodata,
@@ -234,23 +244,21 @@ export const getTravelInfoAll = async (req, res) => {
             'travel_info.description',
             'user'
         ]);
-        const result = data.filter(s => s);
-        console.log("===========",result)
-
-        // if (result <= 0) {
-        //     res.status(401).send({
-        //         success: false,
-        //         message: 'Travel-info data not found'
-        //     })
-        // }
-        // else {
-        //     res.status(200).send({
-        //         success: true,
-        //         data: result,
-        //         length: result.length,
-        //         message: 'Travel-info data fetched successfully'
-        //     })
-        // }
+        const result = data.filter(s => s.travel_info.name  );
+        if (result <= 0) {
+            res.status(401).send({
+                success: false,
+                message: 'Travel-info data not found'
+            })
+        }
+        else {
+            res.status(200).send({
+                success: true,
+                data: result,
+                length: result.length,
+                message: 'Travel-info data fetched successfully'
+            })
+        }
     }
     catch (err) {
         res.status(401).send({
