@@ -2,8 +2,6 @@ import express from "express";
 import {
     getHomeData,
     updateHomeData,
-    getQSpdData,
-    updateQSpdData
 } from "./home.controller.js";
 import multer from 'multer';
 import path from 'path';
@@ -11,6 +9,13 @@ import fs from 'fs';
 import jwt from 'jsonwebtoken';
 import { home } from "./home.model.js"
 import { checkJWT } from "../../middleware/check-jwt.js"
+import {
+    inserthomeinfo,
+    updatehomeInfo,
+    gethomeInfoAll,
+    gethomeinfobyid,
+    deletehomeInfo,
+} from "./home.controller";
 
 export const homeRouter = express.Router();
 
@@ -30,20 +35,16 @@ var homeStorage = multer.diskStorage({
     },
 
     filename: async function (req, file, cb) {
-        // const decoded = await jwt.verify(req.headers.token, configKey.secrets.JWT_SECRET);
-        // const data = await Home.findOne({ page: "Home" })
-        // cb(null, data._id + "_" + Date.now() + "_" + file.originalname)
         const extension = file.originalname.substring(file.originalname.lastIndexOf('.'));
         cb(null, file.fieldname + extension)
     }
 
 })
 
-const uploadHomeContent = multer({
+const homeStorage = multer({
     storage: homeStorage,
     fileFilter: function (req, file, cb) {
         const fileType = /jpeg|jpg|png|mp4/;
-        // const fileType = /jpeg|jpg|png|gif|mp4|avi/;
         const extension = file.originalname.substring(file.originalname.lastIndexOf('.') + 1);
         const mimetype = fileType.test(file.mimetype);
         file.filepath = '/home/home/'
@@ -56,39 +57,34 @@ const uploadHomeContent = multer({
     }
 })
 
-// Upload files for Q-Spd Page
-var qSpdStorage = multer.diskStorage({
+var homestorage = multer.diskStorage({
     destination: async function (req, file, cb) {
         
         const __dirname = path.resolve(path.dirname(''));
-        const qSpdUploadDir = path.join(__dirname, '.', 'public', 'home', 'q-spd');
-        if (fs.existsSync(qSpdUploadDir)) {
-            cb(null, qSpdUploadDir)
+        const homeuploaddir = path.join(__dirname, '.', 'public', 'home');
+        if (fs.existsSync(homeuploaddir)) {
+            cb(null, homeuploaddir)
         }
         else {
-            fs.mkdirSync(qSpdUploadDir, { recursive: true })
-            cb(null, qSpdUploadDir)
+            fs.mkdirSync(homeuploaddir, { recursive: true })
+            cb(null, homeuploaddir)
         }
     },
 
     filename: async function (req, file, cb) {
-        // const decoded = await jwt.verify(req.headers.token, configKey.secrets.JWT_SECRET);
-        // const data = await Home.findOne({ page: "Home" })
-        // cb(null, data._id + "_" + Date.now() + "_" + file.originalname)
         const extension = file.originalname.substring(file.originalname.lastIndexOf('.'));
         cb(null, file.fieldname + extension)
     }
 
 })
 
-const uploadQSpdContent = multer({
-    storage: qSpdStorage,
+const uploadhomeContent = multer({
+    storage: homestorage,
     fileFilter: function (req, file, cb) {
         const fileType = /jpeg|jpg|png|mp4/;
-        // const fileType = /jpeg|jpg|png|gif|mp4|avi/;
         const extension = file.originalname.substring(file.originalname.lastIndexOf('.') + 1);
         const mimetype = fileType.test(file.mimetype);
-        file.filepath = '/home/q-spd/'
+        file.filepath = '/home/'
 
         if (mimetype && extension) {
             return cb(null, true);
@@ -98,7 +94,9 @@ const uploadQSpdContent = multer({
     }
 })
 
-homeRouter.get("/getHomeData", getHomeData)
-homeRouter.post("/updateHomeData", checkJWT, uploadHomeContent.fields([{name: 'landing_video', maxCount: 1}, {name: 'image_1', maxCount: 1}]), updateHomeData)
-homeRouter.get("/getQSpdData", getQSpdData)
-homeRouter.post("/updateQSpdData", checkJWT, uploadQSpdContent.fields([{name: 'cover_image', maxCount: 1}, {name: 'images', maxCount: 20}]), updateQSpdData)
+
+homeRouter.post("/inserthomeinfo", checkJWT, uploadhomeContent.fields([{name: 'image_slider', maxCount: 3}]), inserthomeinfo)
+homeRouter.post("/updatehomeInfo", checkJWT, uploadhomeContent.fields([{name: 'image_slider', maxCount: 3}]), updatehomeInfo)
+homeRouter.get("/gethomeInfoAll", checkJWT, gethomeInfoAll)
+homeRouter.get("/gethomeinfobyid", checkJWT, gethomeinfobyid)
+homeRouter.post("/deletehomeInfo", checkJWT, deletehomeInfo)

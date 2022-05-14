@@ -1,16 +1,89 @@
 import { home } from "./home.model.js"
-import jwt from "jsonwebtoken";
-import mongoose from "mongoose";
-import { response } from "express";
 
-// get all home page data
-export const getHomeData = async (req, res) => {
+
+
+// Home Info apis
+
+export const inserthomeinfo = async (req, res) => {
     try {
-        const data = await home.findOne({page: "Home"});
+
+        const content = req.body
+        const media = req.files
+
+        const data = new home({
+            cover_image: media.cover_image != undefined ? media.cover_image[0].filepath + media.cover_image[0].filename : '',
+            blog_info: {
+                name: content.name,
+                description: content.description
+            },
+            user: content.user
+
+        })
+        const sportsinfoData = await sportsinfo.create(data)
+        res.status(201).send({
+            success: true,
+            data: sportsinfoData,
+            message: 'blog-info inserted successfully',
+        })
+    }
+    catch (err) {
+        res.status(401).send({
+            success: false,
+            message: 'blog-info.controller: ' + err.message
+        });
+    }
+}
+
+
+export const updatehomeInfo = async (req, res) => {
+    console.log("=================== called")
+    try {
+        const blog_id = req.query.blog_id
+        const content = req.body
+        const media = req.files
+
+        const currentData = await sportsinfo.findById(blog_id).lean().exec();
+        let cover_image;
+        cover_image = media.cover_image != undefined
+            ? media.cover_image[0].filepath + media.cover_image[0].filename
+            : currentData.cover_image;
+        const data = {
+            _id: blog_id,
+            cover_image: cover_image,
+            blog_info: {
+                name: content.name,
+                description: content.description
+            },
+        }
+        let bloginfodata = []
+        bloginfodata = await sportsinfo.findByIdAndUpdate(blog_id, data, { new: true })
+
+        res.status(201).send({
+            success: true,
+            data: bloginfodata,
+            message: 'blog-info updated successfully',
+        })
+    }
+    catch (err) {
+        res.status(401).send({
+            success: false,
+            message: 'blog-info.controller: ' + err.message
+        });
+    }
+}
+
+export const gethomeInfoAll = async (req, res) => {
+    try {
+        const data = await sportsinfo.find().select([
+            'cover_image',
+            'blog_info.name',
+            'blog_info.description',
+            'user'
+        ]);
         if (data <= 0) {
             res.status(401).send({
                 success: false,
-                message: 'home page data not found'
+                message: 'blog-info data not found'
             })
         }
         else {
@@ -18,137 +91,64 @@ export const getHomeData = async (req, res) => {
                 success: true,
                 data: data,
                 length: data.length,
-                message: 'home page data fetched successfully'
+                message: 'blog-info data fetched successfully'
             })
         }
     }
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'home.controller: home' + err.message
+            message: 'blog-info.controller: ' + err.message
         })
     }
 }
 
-// update home page data
-export const updateHomeData = async (req, res) => {
+
+export const gethomeinfobyid = async (req, res) => {
     try {
-        // const { userId } = req.body;
-        // const { company, position, city, description, fromdate, todate } = req.body
-        // var data = content;
-        // const home = new Home(data);
-        // home.save()
-        const page_id = req.query.pid
-        const content = req.body
-        const media = req.files
+        const blog_id = req.query.bid
 
-        const currentData = await home.findById(page_id).lean().exec();
-        let landing_video;
-        let image_1;
-        media.landing_video ? landing_video = media.landing_video != undefined ? media.landing_video[0].filepath + media.landing_video[0].filename : ''
-                            : landing_video = currentData.media?.landing_video
-        media.image_1 ? image_1 = media.image_1 != undefined ? media.image_1[0].filepath + media.image_1[0].filename : ''
-                      : image_1 = currentData.media?.image_1
-        const data = {
-            media: {
-                landing_video: landing_video,
-                image_1: image_1
-
-
-                
-            },
-            content: {
-                tag_line: content.tag_line,
-                heading_1: content.heading_1,
-                description_1: content.description_1,
-                heading_2: content.heading_2,
-                sub_heading_2: content.sub_heading_2,
-                description_2: content.description_2,
-                heading_3: content.heading_3,
-                description_3: content.description_3,
-            },
-        };
-
-        // checkUserData(userId);
-        const homeData = await home.findByIdAndUpdate(page_id, data, {new: true})
-        // addData(userId, data, "work");
-
-        res.status(201).send({
-            success: true,
-            data: homeData,
-            message: 'home page content updated successfully',
-        })
-    }
-    catch (err) {
-        res.status(401).send({
-            success: false,
-            message: 'home.controller: home' + err.message
-        });
-    }
-}
-
-// get all q-spd page data
-export const getQSpdData = async (req, res) => {
-    try {
-        const data = await home.findOne({page: "Q-Spd"});
+        const data = await sportsinfo.findById(blog_id);
         if (data <= 0) {
             res.status(401).send({
                 success: false,
-                message: 'q-spd page data not found'
+                message: 'blog-info data not found'
             })
         }
         else {
-            res.status(200).send({
+            res.status(201).send({
                 success: true,
                 data: data,
                 length: data.length,
-                message: 'q-spd page data fetched successfully'
+                message: 'blog-info data fetched successfully'
             })
         }
     }
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'home.controller: q-spd' + err.message
+            message: 'blog-info.controller: ' + err.message
         })
     }
 }
 
-// update q-spd page data
-export const updateQSpdData = async (req, res) => {
+
+export const deletehomeInfo = async (req, res) => {
     try {
-        // const { userId } = req.body;
-        // const { company, position, city, description, fromdate, todate } = req.body
-        // var data = content;
-        // const home = new Home(data);
-        // home.save()
-
-        const page_id = req.query.pid
-        const content = req.body
-        const media = req.files
-        const data = {
-            cover_image: media.cover_image != undefined ? media.cover_image[0].filename : '',
-            price: content.price,
-        };
-
-        for(let i = 0; i < media.images.length; i++) {
-            data.images.push({name: media.images[i].filepath + media.images[i].filename})
-        }
-
-        // checkUserData(userId);
-        const qSpdData = await home.findByIdAndUpdate(page_id, data, {new: true})
-        // addData(userId, data, "work");
-
+        const blog_id = req.query.bid
+        const bloginfoData = await sportsinfo.findByIdAndDelete(blog_id)
         res.status(201).send({
             success: true,
-            data: qSpdData,
-            message: 'q-spd page content updated successfully',
+            data: bloginfoData,
+            message: 'blog deleted successfully',
         })
     }
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'home.controller: q-spd' + err.message
+            message: 'blog-info.controller: ' + err.message
         });
     }
 }
+
+
