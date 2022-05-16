@@ -4,6 +4,9 @@ const { Schema } = mongoose;
 
 const collectionName = 'sports-info'
 const sportsschema = Schema({
+    cover_images: [{
+        name: String,
+    }],
     cover_image: String,
     cover_image_travel : String,
     blog_info: {

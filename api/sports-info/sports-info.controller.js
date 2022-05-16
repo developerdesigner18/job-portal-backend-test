@@ -21,6 +21,10 @@ export const insertbloginfo = async (req, res) => {
             user: content.user
 
         })
+        for(let i = 0; i < media.cover_images.length; i++) {
+            data.cover_images.push({name: media.cover_images[i].filepath + media.cover_images[i].filename})
+        }
+
         const sportsinfoData = await sportsinfo.create(data)
         res.status(201).send({
             success: true,
@@ -38,7 +42,7 @@ export const insertbloginfo = async (req, res) => {
 
 
 export const updateBlogInfo = async (req, res) => {
-    console.log("=================== called")
+    // console.log("=================== called")
     try {
         const blog_id = req.query.blog_id
         const content = req.body
@@ -57,8 +61,15 @@ export const updateBlogInfo = async (req, res) => {
                 description: content.description
             },
         }
-        let bloginfodata = []
-        bloginfodata = await sportsinfo.findByIdAndUpdate(blog_id, data, { new: true })
+
+        let bloginfodata;
+        if (media?.cover_images) {
+            for(let i= 0; i< media.cover_images.length;i++) {
+                bloginfodata = await sportsinfo.findByIdAndUpdate(blog_id, {$push: {cover_images: {"name": media.cover_images[i].filepath + media.cover_images[i].filename }}}, {new: true})
+            }
+        } else {
+            bloginfodata = await sportsinfo.findByIdAndUpdate(blog_id, data, {new: true})
+        }
 
         res.status(201).send({
             success: true,
@@ -200,7 +211,7 @@ export const inserttravelinfo = async (req, res) => {
 
 
 export const updateTravelInfo = async (req, res) => {
-    console.log("=================== called")
+    // console.log("=================== called")
     try {
         const travel_id = req.query.travel_id
         const content = req.body

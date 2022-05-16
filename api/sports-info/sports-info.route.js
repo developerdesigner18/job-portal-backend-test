@@ -60,8 +60,8 @@ const uploadsportsImages = multer({
 
 // Blog info apis
 
-sportsinfoRouter.post("/insertbloginfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image', maxCount: 1}]), insertbloginfo)
-sportsinfoRouter.post("/updatebloginfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image', maxCount: 1}]), updateBlogInfo)
+sportsinfoRouter.post("/insertbloginfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image', maxCount: 1},{name: 'cover_images', maxCount: 5}]), insertbloginfo)
+sportsinfoRouter.post("/updatebloginfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image', maxCount: 1},{name: 'cover_images', maxCount: 5}]), updateBlogInfo)
 sportsinfoRouter.get("/getBlogInfoAll", checkJWT, getBlogInfoAll)
 sportsinfoRouter.get("/getbloginfobyid", checkJWT, getbloginfobyid)
 sportsinfoRouter.post("/deleteBlogInfo", checkJWT, deleteBlogInfo)

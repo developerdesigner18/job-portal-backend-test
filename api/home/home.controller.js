@@ -23,20 +23,19 @@ export const inserthomeinfo = async (req, res) => {
         res.status(201).send({
             success: true,
             data: sportsinfoData,
-            message: 'blog-info inserted successfully',
+            message: 'Home-info inserted successfully',
         })
     }
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'blog-info.controller: ' + err.message
+            message: 'Home-info.controller: ' + err.message
         });
     }
 }
 
 
 export const updatehomeInfo = async (req, res) => {
-    console.log("=================== called")
     try {
         const blog_id = req.query.blog_id
         const content = req.body
@@ -61,13 +60,13 @@ export const updatehomeInfo = async (req, res) => {
         res.status(201).send({
             success: true,
             data: bloginfodata,
-            message: 'blog-info updated successfully',
+            message: 'Home-info updated successfully',
         })
     }
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'blog-info.controller: ' + err.message
+            message: 'Home-info.controller: ' + err.message
         });
     }
 }
@@ -76,8 +75,8 @@ export const gethomeInfoAll = async (req, res) => {
     try {
         const data = await sportsinfo.find().select([
             'cover_image',
-            'blog_info.name',
-            'blog_info.description',
+            'home_info.name',
+            'home_info.description',
             'user'
         ]);
         if (data <= 0) {
