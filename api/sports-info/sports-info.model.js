@@ -8,11 +8,12 @@ const sportsschema = Schema({
         name: String,
     }],
     cover_image: String,
-    cover_image_travel : String,
     blog_info: {
         name: String,
         description: String,
     },
+    
+    cover_image_travel : String,
     travel_info:{
         name: String,
         description: String
