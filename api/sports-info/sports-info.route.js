@@ -71,6 +71,6 @@ sportsinfoRouter.post("/deleteBlogInfo", checkJWT, deleteBlogInfo)
 
 sportsinfoRouter.post("/inserttravelinfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image_travel', maxCount: 1}]), inserttravelinfo)
 sportsinfoRouter.post("/updateTravelInfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image_travel', maxCount: 1}]), updateTravelInfo)
-sportsinfoRouter.get("/getTravelInfoAll", checkJWT, getTravelInfoAll)
-sportsinfoRouter.get("/getTravelinfobyid", checkJWT, getTravelinfobyid)
+sportsinfoRouter.get("/getTravelInfoAll", getTravelInfoAll)
+sportsinfoRouter.get("/getTravelinfobyid", getTravelinfobyid)
 sportsinfoRouter.post("/deleteTravelInfo", checkJWT, deleteTravelInfo)

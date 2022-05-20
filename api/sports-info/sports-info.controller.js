@@ -282,7 +282,7 @@ export const getTravelInfoAll = async (req, res) => {
 
 export const getTravelinfobyid = async (req, res) => {
     try {
-        const travel_id = req.query.bid
+        const travel_id = req.query.travel_id
 
         const data = await sportsinfo.findById(travel_id);
         if (data <= 0) {
@@ -311,7 +311,7 @@ export const getTravelinfobyid = async (req, res) => {
 
 export const deleteTravelInfo = async (req, res) => {
     try {
-        const travel_id = req.query.bid
+        const travel_id = req.query.travel_id
         const travelinfodata = await sportsinfo.findByIdAndDelete(travel_id)
 
         res.status(201).send({
