@@ -1,4 +1,9 @@
 import express from "express";
-import { UserInfo } from "./user-info.model.js";
+import {
+    getuserinfoById,
+
+} from "./user-info.controller.js";
 
 export const userInfoRouter = express.Router();
+
+userInfoRouter.get("/getuserinfoById", getuserinfoById)
