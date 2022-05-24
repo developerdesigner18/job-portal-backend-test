@@ -189,7 +189,8 @@ export const inserttravelinfo = async (req, res) => {
             cover_image_travel: media.cover_image_travel != undefined ? media.cover_image_travel[0].filepath + media.cover_image_travel[0].filename : '',
             travel_info: {
                 name: content.name,
-                description: content.description
+                description: content.description,
+                Url: content.Url
             },
             user: content.user
 
@@ -227,7 +228,8 @@ export const updateTravelInfo = async (req, res) => {
             cover_image_travel: cover_image_travel,
             travel_info: {
                 name: content.name,
-                description: content.description
+                description: content.description,
+                Url:content.Url
             },
         }
         let travelinfodata = []
@@ -253,6 +255,7 @@ export const getTravelInfoAll = async (req, res) => {
             'cover_image_travel',
             'travel_info.name',
             'travel_info.description',
+            'travel_info.Url',
             'user'
         ]);
         const result = data.filter(s => s.travel_info.name  );

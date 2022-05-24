@@ -16,7 +16,8 @@ const sportsschema = Schema({
     cover_image_travel : String,
     travel_info:{
         name: String,
-        description: String
+        description: String,
+        Url:String
     },
     user: {type: Schema.Types.ObjectId, ref: "UserInfo"},
 }, {

@@ -23,5 +23,5 @@ export const checkJWT = (req, res, next) => {
       success: false,
       message: 'No token provided'
     });
-  }
+  } 
 }
