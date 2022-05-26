@@ -2,6 +2,8 @@ import { sportsinfo } from "./sports-info.model.js"
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import { response } from "express";
+import fs from 'fs'
+import * as path from 'path'
 
 
 // Blog Info apis
