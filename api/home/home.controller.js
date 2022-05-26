@@ -80,7 +80,7 @@ export const gethomeInfoAll = async (req, res) => {
             'user'
         ]);
         if (data <= 0) {
-            res.status(401).send({
+            res.status(200).send({
                 success: false,
                 message: 'blog-info data not found'
             })
@@ -109,7 +109,7 @@ export const gethomeinfobyid = async (req, res) => {
 
         const data = await sportsinfo.findById(blog_id);
         if (data <= 0) {
-            res.status(401).send({
+            res.status(200).send({
                 success: false,
                 message: 'blog-info data not found'
             })

@@ -17,7 +17,7 @@ export const getjobinfoAll = async (req, res) => {
             'status'
         ]);
         if (data <= 0) {
-            res.status(401).send({
+            res.status(200).send({
                 success: false,
                 message: 'job-info data not found'
             })
@@ -53,7 +53,7 @@ export const getActivejobinfoAll = async (req, res) => {
             'status'
         ]);
         if (data <= 0) {
-            res.status(401).send({
+            res.status(200).send({
                 success: false,
                 message: 'job-info data not found'
             })
@@ -89,7 +89,7 @@ export const getjobinfoAllByType = async (req, res) => {
             'status'
         ]);
         if (data <= 0) {
-            res.status(401).send({
+            res.status(200).send({
                 success: false,
                 message: 'job-info data not found'
             })
@@ -118,7 +118,7 @@ export const getjobinfoById = async (req, res) => {
 
         const data = await jobinfo.findById(job_id);
         if (data <= 0) {
-            res.status(401).send({
+            res.status(200).send({
                 success: false,
                 message: 'job-info data not found'
             })

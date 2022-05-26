@@ -8,7 +8,7 @@ export const getuserinfoById = async (req, res) => {
 
         const data = await UserInfo.findById(user_id);
         if (data <= 0) {
-            res.status(401).send({
+            res.status(200).send({
                 success: false,
                 message: 'user-info data not found'
             })
