@@ -70,7 +70,7 @@ sportsinfoRouter.post("/deleteBlogInfo", checkJWT, deleteBlogInfo)
 // Travel Info apis
 
 sportsinfoRouter.post("/inserttravelinfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image_travel', maxCount: 1}]), inserttravelinfo)
-sportsinfoRouter.post("/updateTravelInfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image_travel', maxCount: 1}]), updateTravelInfo)
+sportsinfoRouter.post("/updateTravelInfo", uploadsportsImages.fields([{name: 'cover_image_travel', maxCount: 1}]), updateTravelInfo)
 sportsinfoRouter.get("/getTravelInfoAll", getTravelInfoAll)
 sportsinfoRouter.get("/getTravelinfobyid", getTravelinfobyid)
 sportsinfoRouter.post("/deleteTravelInfo", checkJWT, deleteTravelInfo)

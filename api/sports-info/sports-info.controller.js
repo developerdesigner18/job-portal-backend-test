@@ -26,7 +26,7 @@ export const insertbloginfo = async (req, res) => {
         }
 
         const sportsinfoData = await sportsinfo.create(data)
-        res.status(201).send({
+        res.status(200).send({
             success: true,
             data: sportsinfoData,
             message: 'blog-info inserted successfully',
@@ -71,7 +71,7 @@ export const updateBlogInfo = async (req, res) => {
             bloginfodata = await sportsinfo.findByIdAndUpdate(blog_id, data, {new: true})
         }
 
-        res.status(201).send({
+        res.status(200).send({
             success: true,
             data: bloginfodata,
             message: 'blog-info updated successfully',
@@ -94,7 +94,7 @@ export const getBlogInfoAll = async (req, res) => {
             'user'
         ]);
         if (data <= 0) {
-            res.status(401).send({
+            res.status(200).send({
                 success: false,
                 message: 'blog-info data not found'
             })
@@ -123,13 +123,13 @@ export const getbloginfobyid = async (req, res) => {
 
         const data = await sportsinfo.findById(blog_id);
         if (data <= 0) {
-            res.status(401).send({
+            res.status(200).send({
                 success: false,
                 message: 'blog-info data not found'
             })
         }
         else {
-            res.status(201).send({
+            res.status(200).send({
                 success: true,
                 data: data,
                 length: data.length,
@@ -161,7 +161,7 @@ export const deleteBlogInfo = async (req, res) => {
         //     }
         // })
 
-        res.status(201).send({
+        res.status(200).send({
             success: true,
             data: bloginfoData,
             message: 'blog deleted successfully',
@@ -196,7 +196,7 @@ export const inserttravelinfo = async (req, res) => {
 
         })
         const sportsinfoData = await sportsinfo.create(data)
-        res.status(201).send({
+        res.status(200).send({
             success: true,
             data: sportsinfoData,
             message: 'Travel-info inserted successfully',
@@ -235,7 +235,7 @@ export const updateTravelInfo = async (req, res) => {
         let travelinfodata = []
         travelinfodata = await sportsinfo.findByIdAndUpdate(travel_id, data, { new: true })
 
-        res.status(201).send({
+        res.status(200).send({
             success: true,
             data: travelinfodata,
             message: 'Travel-info updated successfully',
@@ -260,7 +260,7 @@ export const getTravelInfoAll = async (req, res) => {
         ]);
         const result = data.filter(s => s.travel_info.name  );
         if (result <= 0) {
-            res.status(401).send({
+            res.status(200).send({
                 success: false,
                 message: 'Travel-info data not found'
             })
@@ -289,7 +289,7 @@ export const getTravelinfobyid = async (req, res) => {
 
         const data = await sportsinfo.findById(travel_id);
         if (data <= 0) {
-            res.status(401).send({
+            res.status(200).send({
                 success: false,
                 message: 'Travel-info data not found'
             })
@@ -317,7 +317,7 @@ export const deleteTravelInfo = async (req, res) => {
         const travel_id = req.query.travel_id
         const travelinfodata = await sportsinfo.findByIdAndDelete(travel_id)
 
-        res.status(201).send({
+        res.status(200).send({
             success: true,
             data: travelinfodata,
             message: 'Travel-info deleted successfully',
