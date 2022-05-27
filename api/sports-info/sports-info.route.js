@@ -14,7 +14,9 @@ import {
     updateTravelInfo,
     getTravelInfoAll,
     getTravelinfobyid,
-    deleteTravelInfo
+    deleteTravelInfo,
+    deleteTravelImage,
+    getTravelInfoAllByType
 
 } from "./sports-info.controller.js";
 export const sportsinfoRouter = express.Router();
@@ -69,8 +71,10 @@ sportsinfoRouter.post("/deleteBlogInfo", checkJWT, deleteBlogInfo)
 
 // Travel Info apis
 
-sportsinfoRouter.post("/inserttravelinfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image_travel', maxCount: 1}]), inserttravelinfo)
-sportsinfoRouter.post("/updateTravelInfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image_travel', maxCount: 1}]), updateTravelInfo)
+sportsinfoRouter.post("/inserttravelinfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image_travel', maxCount: 1} ,{name: 'travel_images', maxCount: 20}]), inserttravelinfo)
+sportsinfoRouter.post("/updateTravelInfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image_travel', maxCount: 1} , {name: 'travel_images', maxCount: 20}]), updateTravelInfo)
+sportsinfoRouter.post("/deleteTravelInfo", checkJWT, deleteTravelInfo)
+sportsinfoRouter.post("/deleteTravelImage", checkJWT, deleteTravelImage)
 sportsinfoRouter.get("/getTravelInfoAll", getTravelInfoAll)
 sportsinfoRouter.get("/getTravelinfobyid", getTravelinfobyid)
-sportsinfoRouter.post("/deleteTravelInfo", checkJWT, deleteTravelInfo)
+sportsinfoRouter.get("/getTravelInfoAllByType", getTravelInfoAllByType)
