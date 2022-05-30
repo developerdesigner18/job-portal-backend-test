@@ -199,27 +199,10 @@ export const inserttravelinfo = async (req, res) => {
             user: content.user
 
         })
-        // for(let i = 0; i < media.travel_images.length; i++) {
-        //     data.travel_images.push({name: media.travel_images[i].filepath + media.travel_images[i].filename})
-        // }
-        // let value = content.cover_images
-        // console.log("values",value)
-        // let array = []
-        // array.push(data)
+        for(let i = 0; i < media.travel_images.length; i++) {
+            data.travel_images.push({name: media.travel_images[i].filepath + media.travel_images[i].filename})
+        }
 
-        // array = array.filter(item => item !== value)
-
-        // console.log(array)
-        
-        // const index = array.indexOf(content.cover_images);
-        // console.log("index0000",index)
-        // if (index > -1) {
-        //     array.splice(index, 4); 
-        //   }
-        // array.forEach(element =>  {
-        //     delete element.cover_images;
-        //     console.log("element.cover_images",element.cover_images)
-        // })
         const sportsinfoData = await sportsinfo.create(data)
 
         res.status(200).send({
@@ -327,6 +310,7 @@ export const getTravelInfoAll = async (req, res) => {
             'travel_info.description',
             'travel_info.Url',
             'filteroptions',
+            'travel_images',
             'user'
         ]);
         const result = data.filter(s => s.travel_info.name  );
@@ -388,6 +372,7 @@ export const getTravelInfoAllByType = async (req, res) => {
     try {
         const data = await sportsinfo.find({filteroptions: ttype}).select([
             'cover_image_travel',
+            'travel_images',
             'filteroptions',
             'travel_info.name',
             'travel_info.description',
