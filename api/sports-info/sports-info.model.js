@@ -22,6 +22,7 @@ const sportsschema = Schema({
     travel_info:{
         name: String,
         description: String,
+        player_names: String,
         Url:String,
     },
     filteroptions:String,

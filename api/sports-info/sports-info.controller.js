@@ -193,6 +193,7 @@ export const inserttravelinfo = async (req, res) => {
             travel_info: {
                 name: content.name,
                 description: content.description,
+                player_names: content.player_names,
                 Url: content.Url,
             },
             filteroptions:content.filteroptions,
@@ -249,6 +250,7 @@ export const updateTravelInfo = async (req, res) => {
             travel_info: {
                 name: content.name,
                 description: content.description,
+                player_names: content.player_names,
                 Url:content.Url,
             },
             filteroptions:content.filteroptions
@@ -319,6 +321,7 @@ export const getTravelInfoAll = async (req, res) => {
             'cover_image_travel',
             'travel_info.name',
             'travel_info.description',
+            'travel_info.player_names',
             'travel_info.Url',
             'filteroptions',
             'travel_images',
