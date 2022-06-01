@@ -228,6 +228,17 @@ export const updateTravelInfo = async (req, res) => {
         const media = req.files
 
         const currentData = await sportsinfo.findById(travel_id).lean().exec();
+        // if (currentData.rows[0].travel_images) {
+        //     const banneruploadDir = paths.join(__dirname, "..", "..", "public", "sports-info");
+        //     console.log('banneruploadDir', `${banneruploadDir}/${currentData.rows[0].travel_images}`);
+            
+        //     if(fs.existsSync(`${banneruploadDir}/${currentData.rows[0].travel_images}`)) {
+        //         fs.unlink(`${banneruploadDir}/${currentData.rows[0].travel_images}`, (err => {
+        //             if (err) console.log(err)
+        //             else console.log("\nDeleted File");
+        //         }))
+        //     }
+        // }
         let cover_image_travel;
         cover_image_travel = media.cover_image_travel != undefined
             ? media.cover_image_travel[0].filepath + media.cover_image_travel[0].filename

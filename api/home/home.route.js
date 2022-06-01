@@ -95,8 +95,8 @@ const uploadhomeContent = multer({
 })
 
 
-homeRouter.post("/inserthomeinfo", checkJWT, uploadhomeContent.fields([{name: 'image_slider', maxCount: 3}]), inserthomeinfo)
-homeRouter.post("/updatehomeInfo", checkJWT, uploadhomeContent.fields([{name: 'image_slider', maxCount: 3}]), updatehomeInfo)
+homeRouter.post("/inserthomeinfo", checkJWT, uploadhomeContent.fields([{name: 'image_slider', maxCount: 4}]), inserthomeinfo)
+homeRouter.post("/updatehomeInfo", checkJWT, uploadhomeContent.fields([{name: 'image_slider', maxCount: 4}]), updatehomeInfo)
 homeRouter.get("/gethomeInfoAll", checkJWT, gethomeInfoAll)
 homeRouter.get("/gethomeinfobyid", checkJWT, gethomeinfobyid)
 homeRouter.post("/deletehomeInfo", checkJWT, deletehomeInfo)

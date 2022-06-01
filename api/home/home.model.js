@@ -4,11 +4,10 @@ const { Schema } = mongoose;
 
 const collectionName = 'home'
 const homeSchema = Schema({
-    image_1: String,
-    content: {
-        tag_line: String,
-
-    }
+    tagline:String,
+    home_images: [{
+        name: String,
+    }],
 }, {
     timestamps: true
 })
