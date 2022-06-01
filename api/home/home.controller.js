@@ -1,182 +1,142 @@
+import { homeinfo } from "./home.model.js"
+import path from 'path';
+import fs from 'fs';
 // Home Info Apis start
-
-
 export const inserthomeinfo = async (req, res) => {
     try {
-
         const content = req.body
         const media = req.files
-
-        const data = new sportsinfo({
-            cover_image_travel: media.cover_image_travel != undefined ? media.cover_image_travel[0].filepath + media.cover_image_travel[0].filename : '',
-            travel_info: {
-                name: content.name,
-                description: content.description,
-                Url: content.Url,
-            },
-            filteroptions:content.filteroptions,
-            user: content.user
-
+        const data = new homeinfo({
+            title: content.title
         })
-        for(let i = 0; i < media.travel_images.length; i++) {
-            data.travel_images.push({name: media.travel_images[i].filepath + media.travel_images[i].filename})
+        for(let i = 0; i < media.home_images.length; i++) {
+            data.home_images.push({name: media.home_images[i].filepath + media.home_images[i].filename})
         }
-
-        const sportsinfoData = await sportsinfo.create(data)
-
+        const homeData = await homeinfo.create(data)
         res.status(200).send({
             success: true,
-            data: sportsinfoData,
-            message: 'Travel-info inserted successfully',
+            data: homeData,
+            message: 'Home-info inserted successfully',
         })
     }
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'Travel-info.controller: ' + err.message
+            message: 'Home-info.controller: ' + err.message
         });
     }
 }
-
-
-export const updateTravelInfo = async (req, res) => {
-    // console.log("=================== called")
+export const updatehomeInfo = async (req, res) => {
     try {
-        const travel_id = req.query.travel_id
         const content = req.body
         const media = req.files
-
-        const currentData = await sportsinfo.findById(travel_id).lean().exec();
-        // if (currentData.rows[0].travel_images) {
-        //     const banneruploadDir = paths.join(__dirname, "..", "..", "public", "sports-info");
-        //     console.log('banneruploadDir', `${banneruploadDir}/${currentData.rows[0].travel_images}`);
-            
-        //     if(fs.existsSync(`${banneruploadDir}/${currentData.rows[0].travel_images}`)) {
-        //         fs.unlink(`${banneruploadDir}/${currentData.rows[0].travel_images}`, (err => {
-        //             if (err) console.log(err)
-        //             else console.log("\nDeleted File");
-        //         }))
-        //     }
-        // }
-        let cover_image_travel;
-        cover_image_travel = media.cover_image_travel != undefined
-            ? media.cover_image_travel[0].filepath + media.cover_image_travel[0].filename
-            : currentData.cover_image_travel;
-        const data = {
-            _id: travel_id,
-            cover_image_travel: cover_image_travel,
-            travel_info: {
-                name: content.name,
-                description: content.description,
-                Url:content.Url,
-            },
-            filteroptions:content.filteroptions
-        }
-        let travelinfodata
-        travelinfodata = await sportsinfo.findByIdAndUpdate(travel_id, data, {new: true})
-        if (media?.travel_images) {
-            for(let i= 0; i< media.travel_images.length;i++) {
-                travelinfodata = await sportsinfo.findByIdAndUpdate(travel_id, {$push: {travel_images: {"name": media.travel_images[i].filepath + media.travel_images[i].filename }}}, {new: true})
+        let homeinfodata;
+        homeinfodata = await homeinfo.findByIdAndUpdate(content.home_id, {$set: {title: content.title, home_images: [] }}, {new: true})
+        if (media?.home_images) {
+            for(let i= 0; i< media.home_images.length;i++) {
+                homeinfodata = await homeinfo.findByIdAndUpdate(content.home_id, {$push: {home_images: {"name": media.home_images[i].filepath + media.home_images[i].filename }}}, {new: true})
             }
         }
         res.status(200).send({
             success: true,
-            data: travelinfodata,
-            message: 'Travel-info updated successfully',
+            data: homeinfodata,
+            message: 'Home-info updated successfully',
         })
     }
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'Travel-info.controller: ' + err.message
+            message: 'Home-info.controller: ' + err.message
         });
     }
 }
-
-export const deleteTravelInfo = async (req, res) => {
+export const deletehomeInfo = async (req, res) => {
     try {
-        const travel_id = req.query.travel_id
-        const travelinfodata = await sportsinfo.findByIdAndDelete(travel_id)
-
+        const home_id = req.query.home_id
+        const homeinfodata = await homeinfo.findByIdAndDelete(home_id)
         res.status(200).send({
             success: true,
-            data: travelinfodata,
-            message: 'Travel-info deleted successfully',
+            data: homeinfodata,
+            message: 'home-info deleted successfully',
         })
     }
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'Travel-info.controller: ' + err.message
+            message: 'home-info.controller: ' + err.message
         });
     }
 }
-
-export const deleteTravelImage = async (req, res) => {
+export const deletehomeImage = async (req, res) => {
     try {
-        const travel_id = req.query.travel_id
-        const image_id = req.query.iid
-        const travelInfoData = await sportsinfo.findByIdAndUpdate(travel_id, {$pull : {travel_images: {_id : image_id}}}, {new: true})
-
+        const home_id = req.query.home_id
+        const image_id = req.query.image_id
+        const homeInfoData = await homeinfo.findByIdAndUpdate(home_id, {$pull : {home_images: {_id : image_id}}})
+        if(homeInfoData){
+            if (homeInfoData.home_images) {
+                let fileName = homeInfoData.home_images.filter((img) => img._id == image_id)?.name
+                const __dirname = path.resolve(path.dirname(''));
+                const banneruploadDir = path.join(__dirname, "..", "..", "public", "home");
+                if(fs.existsSync(`${banneruploadDir}/${fileName}`)) {
+                    fs.unlink(`${banneruploadDir}/${fileName}`, (err => {
+                        if (err) console.log(err)
+                        else console.log("\nDeleted File");
+                    }))
+                }
+            }
+        }
         res.status(201).send({
             success: true,
-            data: travelInfoData,
-            message: 'Travel images deleted successfully',
+            data: homeInfoData,
+            message: 'Home images deleted successfully',
         })
     }
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'Travel-info.controller: ' + err.message
+            message: 'Home-info.controller: ' + err.message
         });
     }
 }
-
-export const getTravelInfoAll = async (req, res) => {
+export const gethomeInfoAll = async (req, res) => {
     try {
-        const data = await sportsinfo.find().select([
-            'cover_image_travel',
-            'travel_info.name',
-            'travel_info.description',
-            'travel_info.Url',
-            'filteroptions',
-            'travel_images',
-            'user'
-        ]);
-        const result = data.filter(s => s.travel_info.name  );
-        if (result <= 0) {
+        const data = await homeinfo.find().select([
+            'title',
+            'home_images'
+        ])
+        .lean()
+        .exec();
+        // console.log("=-=-=-data", data);
+        // const result = data.filter(s => s.Home_info.name  );
+        if (data <= 0) {
             res.status(200).send({
                 success: false,
-                message: 'Travel-info data not found'
+                message: 'home-info data not found'
             })
         }
         else {
             res.status(200).send({
                 success: true,
-                data: result,
-                length: result.length,
-                message: 'Travel-info data fetched successfully'
+                data: data,
+                length: data.length,
+                message: 'home-info data fetched successfully'
             })
         }
     }
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'Travel-info.controller: ' + err.message
+            message: 'home-info.controller: ' + err.message
         })
     }
 }
-
-
-export const getTravelinfobyid = async (req, res) => {
+export const gethomeinfobyid = async (req, res) => {
     try {
-        const travel_id = req.query.travel_id
-
-        const data = await sportsinfo.findById(travel_id);
+        const data = await homeinfo.findById(req.query.home_id);
         if (data <= 0) {
             res.status(200).send({
                 success: false,
-                message: 'Travel-info data not found'
+                message: 'Home-info data not found'
             })
         }
         else {
@@ -184,53 +144,15 @@ export const getTravelinfobyid = async (req, res) => {
                 success: true,
                 data: data,
                 length: data.length,
-                message: 'Travel-info data fetched successfully'
+                message: 'Home-info data fetched successfully'
             })
         }
     }
     catch (err) {
         res.status(401).send({
             success: false,
-            message: 'Travel-info.controller: ' + err.message
+            message: 'Home-info.controller: ' + err.message
         })
     }
 }
-
-
-export const getTravelInfoAllByType = async (req, res) => {
-    var ttype = decodeURIComponent(req.query?.ttype)
-    try {
-        const data = await sportsinfo.find({filteroptions: ttype}).select([
-            'cover_image_travel',
-            'travel_images',
-            'filteroptions',
-            'travel_info.name',
-            'travel_info.description',
-            'travel_info.Url',
-            'user'
-        ]);
-        if (data <= 0) {
-            res.status(200).send({
-                success: false,
-                message: 'Travel-info data not found'
-            })
-        }
-        else {
-            res.status(200).send({
-                success: true,
-                data: data,
-                length: data.length,
-                message: 'Travel-info data fetched successfully'
-            })
-        }
-    }
-    catch (err) {
-        res.status(401).send({
-            success: false,
-            message: 'Travel-info.controller: ' + err.message
-        })
-    }
-}
-
-
-// Travel Info Apis end
+// Home Info Apis end
