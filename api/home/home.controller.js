@@ -53,12 +53,33 @@ export const updatehomeInfo = async (req, res) => {
 export const deletehomeInfo = async (req, res) => {
     try {
         const home_id = req.query.home_id
+        const homeInfoImgData = await homeinfo.findById(home_id).lean().exec();
         const homeinfodata = await homeinfo.findByIdAndDelete(home_id)
-        res.status(200).send({
-            success: true,
-            data: homeinfodata,
-            message: 'home-info deleted successfully',
-        })
+
+        if(homeInfoImgData.home_images){
+
+            for(let i = 0;i<homeInfoImgData.home_images.length;i++){
+                
+                const __dirname = path.resolve();
+                const banneruploadDir = path.join(__dirname, "public");
+
+                if(fs.existsSync(`${banneruploadDir}/${homeInfoImgData.home_images[i].name}`)) {
+                    fs.unlink(`${banneruploadDir}/${homeInfoImgData.home_images[i].name}`, (err => {
+                        if (err){ 
+                            console.log(err)
+                        }else {
+                            console.log('home-info deleted image successfully');
+                        };
+                    }))
+                }
+            }
+        }
+        if(homeinfodata){
+            res.status(200).send({
+                success: true,
+                message: 'home-info deleted successfully',
+            })
+        }
     }
     catch (err) {
         res.status(401).send({
@@ -71,25 +92,34 @@ export const deletehomeImage = async (req, res) => {
     try {
         const home_id = req.query.home_id
         const image_id = req.query.image_id
-        const homeInfoData = await homeinfo.findByIdAndUpdate(home_id, {$pull : {home_images: {_id : image_id}}})
+        const homeInfoData = await homeinfo.findById(home_id)
+        const homeInfoUpdateData = await homeinfo.findByIdAndUpdate(home_id, {$pull : {home_images: {_id : image_id}}})
         if(homeInfoData){
             if (homeInfoData.home_images) {
-                let fileName = homeInfoData.home_images.filter((img) => img._id == image_id)?.name
-                const __dirname = path.resolve(path.dirname(''));
-                const banneruploadDir = path.join(__dirname, "..", "..", "public", "home");
-                if(fs.existsSync(`${banneruploadDir}/${fileName}`)) {
-                    fs.unlink(`${banneruploadDir}/${fileName}`, (err => {
-                        if (err) console.log(err)
-                        else console.log("\nDeleted File");
-                    }))
+                for(let i = 0;i<homeInfoData.home_images.length;i++){
+                    const __dirname = path.resolve();
+                    const banneruploadDir = path.join(__dirname, "public");
+                    if(homeInfoData.home_images[i]._id.toString() == image_id){
+                    
+                        if(fs.existsSync(`${banneruploadDir}/${homeInfoData.home_images[i].name}`)) {
+                            fs.unlink(`${banneruploadDir}/${homeInfoData.home_images[i].name}`, (err => {
+                                if (err) console.log(err)
+                                else{
+                                    if(homeInfoUpdateData){
+                                        res.status(201).send({
+                                            success: true,
+                                            data: homeInfoUpdateData,
+                                            message: 'Home images deleted successfully',
+                                        })
+                                    }
+                                }
+                            }))
+                        }
+                    }
                 }
+
             }
         }
-        res.status(201).send({
-            success: true,
-            data: homeInfoData,
-            message: 'Home images deleted successfully',
-        })
     }
     catch (err) {
         res.status(401).send({
