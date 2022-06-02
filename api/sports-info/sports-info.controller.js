@@ -195,6 +195,7 @@ export const inserttravelinfo = async (req, res) => {
                 description: content.description,
                 player_names: content.player_names,
                 Url: content.Url,
+                flag:content.flag
             },
             filteroptions:content.filteroptions,
             user: content.user
@@ -252,6 +253,7 @@ export const updateTravelInfo = async (req, res) => {
                 description: content.description,
                 player_names: content.player_names,
                 Url:content.Url,
+                flag:content.flag
             },
             filteroptions:content.filteroptions
         }
@@ -323,6 +325,7 @@ export const getTravelInfoAll = async (req, res) => {
             'travel_info.description',
             'travel_info.player_names',
             'travel_info.Url',
+            'travel_info.flag',
             'filteroptions',
             'travel_images',
             'user'
@@ -391,6 +394,7 @@ export const getTravelInfoAllByType = async (req, res) => {
             'travel_info.name',
             'travel_info.description',
             'travel_info.Url',
+            'travel_info.flag',   
             'user'
         ]);
         if (data <= 0) {

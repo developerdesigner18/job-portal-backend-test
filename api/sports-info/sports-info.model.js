@@ -24,6 +24,7 @@ const sportsschema = Schema({
         description: String,
         player_names: String,
         Url:String,
+        flag:String,
     },
     filteroptions:String,
     user: {type: Schema.Types.ObjectId, ref: "UserInfo"},
