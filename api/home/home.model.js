@@ -7,6 +7,28 @@ const homeSchema = Schema({
     home_images: [{
         name: String,
     }],
+    rd3_zone:{
+        title: String,
+        description: String,
+        job_portal:{
+            title: String,
+            description: String,
+        },
+        stadtmarketing: {
+            title: String,
+            description: String,
+        },
+        sportmarketing: {
+            title: String,
+            description: String,
+        }
+    },
+    rd3_references:[{
+        question: String,
+        rd3_image: String,
+        description: String,
+        designation: String
+    }]
 }, {
     timestamps: true
 })

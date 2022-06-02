@@ -6,9 +6,33 @@ export const inserthomeinfo = async (req, res) => {
     try {
         const content = req.body
         const media = req.files
+        console.log("media", media)
         const data = new homeinfo({
-            title: content.title
+            title: content.title,
+            rd3_zone:{
+                title: content.rd3_zone_title,
+                description: content.rd3_zone_description,
+                job_portal: {
+                    title: content.rd3_zone_job_portal_title,
+                    description: content.rd3_zone_job_portal_description,
+                },
+                stadtmarketing: {
+                    title: content.rd3_zone_stadtmarketing_title,
+                    description: content.rd3_zone_stadtmarketing_description,
+                },
+                sportmarketing: {
+                    title: content.rd3_zone_sportmarketing_title,
+                    description: content.rd3_zone_sportmarketing_description,
+                }
+            },
+            rd3_references: {
+                question: content.rd3_references_question,
+                rd3_image: media.rd3_references_rd3_image[0].filepath + media.rd3_references_rd3_image[0].filename,
+                description: content.rd3_references_description,
+                designation: content.rd3_references_designation
+            }
         })
+
         for(let i = 0; i < media.home_images.length; i++) {
             data.home_images.push({name: media.home_images[i].filepath + media.home_images[i].filename})
         }
@@ -31,7 +55,32 @@ export const updatehomeInfo = async (req, res) => {
         const content = req.body
         const media = req.files
         let homeinfodata;
-        homeinfodata = await homeinfo.findByIdAndUpdate(content.home_id, {$set: {title: content.title, home_images: [] }}, {new: true})
+        homeinfodata = await homeinfo.findByIdAndUpdate(content.home_id, {$set: {
+            title: content.title,
+            rd3_zone:{
+                title: content.rd3_zone_title,
+                description: content.rd3_zone_description,
+                job_portal: {
+                    title: content.rd3_zone_job_portal_title,
+                    description: content.rd3_zone_job_portal_description,
+                },
+                stadtmarketing: {
+                    title: content.rd3_zone_stadtmarketing_title,
+                    description: content.rd3_zone_stadtmarketing_description,
+                },
+                sportmarketing: {
+                    title: content.rd3_zone_sportmarketing_title,
+                    description: content.rd3_zone_sportmarketing_description,
+                }
+            },
+            rd3_references: {
+                question: content.rd3_references_question,
+                rd3_image: media.rd3_references_rd3_image[0].filepath + media.rd3_references_rd3_image[0].filename,
+                description: content.rd3_references_description,
+                designation: content.rd3_references_designation
+            },
+            home_images: [] 
+        }}, {new: true})
         if (media?.home_images) {
             for(let i= 0; i< media.home_images.length;i++) {
                 homeinfodata = await homeinfo.findByIdAndUpdate(content.home_id, {$push: {home_images: {"name": media.home_images[i].filepath + media.home_images[i].filename }}}, {new: true})
