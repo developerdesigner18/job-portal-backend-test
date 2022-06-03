@@ -7,6 +7,7 @@ export const inserthomeinfo = async (req, res) => {
         const content = req.body
         const media = req.files
         console.log("media", media)
+        // console.log("-=-==-=-content",content);
         const data = new homeinfo({
             title: content.title,
             rd3_zone:{
@@ -27,6 +28,7 @@ export const inserthomeinfo = async (req, res) => {
             },
             rd3_references: {
                 question: content.rd3_references_question,
+                name: content.rd3_references_name,
                 rd3_image: media.rd3_references_rd3_image[0].filepath + media.rd3_references_rd3_image[0].filename,
                 description: content.rd3_references_description,
                 designation: content.rd3_references_designation
@@ -34,7 +36,8 @@ export const inserthomeinfo = async (req, res) => {
         })
 
         for(let i = 0; i < media.home_images.length; i++) {
-            data.home_images.push({name: media.home_images[i].filepath + media.home_images[i].filename})
+            console.log("=--==-=--=home_image_title", content.home_image_title[i]);
+            data.home_images.push({name: media.home_images[i].filepath + media.home_images[i].filename, title: content.home_image_title[i]});
         }
         const homeData = await homeinfo.create(data)
         res.status(200).send({
@@ -75,6 +78,7 @@ export const updatehomeInfo = async (req, res) => {
             },
             rd3_references: {
                 question: content.rd3_references_question,
+                name: content.rd3_references_name,
                 rd3_image: media.rd3_references_rd3_image[0].filepath + media.rd3_references_rd3_image[0].filename,
                 description: content.rd3_references_description,
                 designation: content.rd3_references_designation
@@ -179,14 +183,10 @@ export const deletehomeImage = async (req, res) => {
 }
 export const gethomeInfoAll = async (req, res) => {
     try {
-        const data = await homeinfo.find().select([
-            'title',
-            'home_images'
-        ])
+        const data = await homeinfo.find()
         .lean()
         .exec();
-        // console.log("=-=-=-data", data);
-        // const result = data.filter(s => s.Home_info.name  );
+
         if (data <= 0) {
             res.status(200).send({
                 success: false,

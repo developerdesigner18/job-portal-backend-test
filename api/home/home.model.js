@@ -6,6 +6,7 @@ const homeSchema = Schema({
     title:String,
     home_images: [{
         name: String,
+        title: String
     }],
     rd3_zone:{
         title: String,
@@ -25,6 +26,7 @@ const homeSchema = Schema({
     },
     rd3_references:[{
         question: String,
+        name: String,
         rd3_image: String,
         description: String,
         designation: String
