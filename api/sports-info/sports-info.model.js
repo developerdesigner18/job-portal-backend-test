@@ -8,10 +8,12 @@ const sportsschema = Schema({
     cover_images: [{
         name: String,
     }],
+    
     cover_image: String,
     blog_info: {
         name: String,
         description: String,
+        fulltext:String,
     },
 
 // travel api model 
@@ -23,7 +25,7 @@ const sportsschema = Schema({
         name: String,
         description: String,
         player_names: String,
-        Url:String,
+        Url:String, 
         flag:String,
     },
     filteroptions:String,

@@ -6,7 +6,7 @@ import fs from 'fs'
 import * as path from 'path'
 
 
-// Blog Info apis
+// Blog Info apis start
 
 export const insertbloginfo = async (req, res) => {
     try {
@@ -18,14 +18,15 @@ export const insertbloginfo = async (req, res) => {
             cover_image: media.cover_image != undefined ? media.cover_image[0].filepath + media.cover_image[0].filename : '',
             blog_info: {
                 name: content.name,
-                description: content.description
+                description: content.description,
+                fulltext:content.fulltext
             },
             user: content.user
 
         })
-        for(let i = 0; i < media.cover_images.length; i++) {
-            data.cover_images.push({name: media.cover_images[i].filepath + media.cover_images[i].filename})
-        }
+        // for(let i = 0; i < media.cover_images.length; i++) {
+        //     data.cover_images.push({name: media.cover_images[i].filepath + media.cover_images[i].filename})
+        // }
 
         const sportsinfoData = await sportsinfo.create(data)
         res.status(200).send({
@@ -60,20 +61,18 @@ export const updateBlogInfo = async (req, res) => {
             cover_image: cover_image,
             blog_info: {
                 name: content.name,
-                description: content.description
+                description: content.description,
+                fulltext:content.fulltext
             },
         }
 
         let bloginfodata;
         bloginfodata = await sportsinfo.findByIdAndUpdate(blog_id, data, {new: true})
-        if (media?.cover_images) {
-            for(let i= 0; i< media.cover_images.length;i++) {
-                bloginfodata = await sportsinfo.findByIdAndUpdate(blog_id, {$push: {cover_images: {"name": media.cover_images[i].filepath + media.cover_images[i].filename }}}, {new: true})
-            }
-        } 
-        // else {
-        // }
-
+        // if (media?.cover_images) {
+        //     for(let i= 0; i< media.cover_images.length;i++) {
+        //         bloginfodata = await sportsinfo.findByIdAndUpdate(blog_id, {$push: {cover_images: {"name": media.cover_images[i].filepath + media.cover_images[i].filename }}}, {new: true})
+        //     }
+        // } 
         res.status(200).send({
             success: true,
             data: bloginfodata,
@@ -94,6 +93,7 @@ export const getBlogInfoAll = async (req, res) => {
             'cover_image',
             'blog_info.name',
             'blog_info.description',
+            'blog_info.fulltext',
             'user'
         ]);
         if (data <= 0) {
@@ -179,6 +179,9 @@ export const deleteBlogInfo = async (req, res) => {
 }
 
 
+// Blog Info Apis End
+
+
 // Travel Info Apis start
 
 
@@ -230,17 +233,6 @@ export const updateTravelInfo = async (req, res) => {
         const media = req.files
 
         const currentData = await sportsinfo.findById(travel_id).lean().exec();
-        // if (currentData.rows[0].travel_images) {
-        //     const banneruploadDir = paths.join(__dirname, "..", "..", "public", "sports-info");
-        //     console.log('banneruploadDir', `${banneruploadDir}/${currentData.rows[0].travel_images}`);
-            
-        //     if(fs.existsSync(`${banneruploadDir}/${currentData.rows[0].travel_images}`)) {
-        //         fs.unlink(`${banneruploadDir}/${currentData.rows[0].travel_images}`, (err => {
-        //             if (err) console.log(err)
-        //             else console.log("\nDeleted File");
-        //         }))
-        //     }
-        // }
         let cover_image_travel;
         cover_image_travel = media.cover_image_travel != undefined
             ? media.cover_image_travel[0].filepath + media.cover_image_travel[0].filename
