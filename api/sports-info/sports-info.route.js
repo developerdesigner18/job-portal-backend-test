@@ -16,6 +16,7 @@ import {
     getTravelinfobyid,
     deleteTravelInfo,
     deleteTravelImage,
+    deleteBlogImage,
     getTravelInfoAllByType
 
 } from "./sports-info.controller.js";
@@ -62,11 +63,13 @@ const uploadsportsImages = multer({
 
 // Blog info apis
 
-sportsinfoRouter.post("/insertbloginfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image', maxCount: 1},{name: 'cover_images', maxCount: 5}]), insertbloginfo)
-sportsinfoRouter.post("/updatebloginfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image', maxCount: 1},{name: 'cover_images', maxCount: 5}]), updateBlogInfo)
-sportsinfoRouter.get("/getBlogInfoAll", checkJWT, getBlogInfoAll)
-sportsinfoRouter.get("/getbloginfobyid", checkJWT, getbloginfobyid)
+sportsinfoRouter.post("/insertbloginfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image_blog', maxCount: 1},{name: 'cover_images', maxCount: 5}]), insertbloginfo)
+sportsinfoRouter.post("/updatebloginfo", checkJWT, uploadsportsImages.fields([{name: 'cover_image_blog', maxCount: 1},{name: 'cover_images', maxCount: 5}]), updateBlogInfo)
+sportsinfoRouter.get("/getBlogInfoAll", getBlogInfoAll)
+sportsinfoRouter.get("/getbloginfobyid", getbloginfobyid)
 sportsinfoRouter.post("/deleteBlogInfo", checkJWT, deleteBlogInfo)
+sportsinfoRouter.post("/deleteBlogImage", checkJWT, deleteBlogImage)
+
 
 
 // Travel Info apis

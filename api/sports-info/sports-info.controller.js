@@ -15,7 +15,7 @@ export const insertbloginfo = async (req, res) => {
         const media = req.files
 
         const data = new sportsinfo({
-            cover_image: media.cover_image != undefined ? media.cover_image[0].filepath + media.cover_image[0].filename : '',
+            cover_image_blog: media.cover_image_blog != undefined ? media.cover_image_blog[0].filepath + media.cover_image_blog[0].filename : '',
             blog_info: {
                 name: content.name,
                 description: content.description,
@@ -24,8 +24,8 @@ export const insertbloginfo = async (req, res) => {
             user: content.user
 
         })
-        // for(let i = 0; i < media.cover_images.length; i++) {
-        //     data.cover_images.push({name: media.cover_images[i].filepath + media.cover_images[i].filename})
+        // for(let i = 0; i < media.blog_images.length; i++) {
+        //     data.blog_images.push({name: media.blog_images[i].filepath + media.blog_images[i].filename})
         // }
 
         const sportsinfoData = await sportsinfo.create(data)
@@ -52,13 +52,13 @@ export const updateBlogInfo = async (req, res) => {
         const media = req.files
 
         const currentData = await sportsinfo.findById(blog_id).lean().exec();
-        let cover_image;
-        cover_image = media.cover_image != undefined
-            ? media.cover_image[0].filepath + media.cover_image[0].filename
-            : currentData.cover_image;
+        let cover_image_blog;
+        cover_image_blog = media.cover_image_blog != undefined
+            ? media.cover_image_blog[0].filepath + media.cover_image_blog[0].filename
+            : currentData.cover_image_blog;
         const data = {
             _id: blog_id,
-            cover_image: cover_image,
+            cover_image_blog: cover_image_blog,
             blog_info: {
                 name: content.name,
                 description: content.description,
@@ -68,9 +68,9 @@ export const updateBlogInfo = async (req, res) => {
 
         let bloginfodata;
         bloginfodata = await sportsinfo.findByIdAndUpdate(blog_id, data, {new: true})
-        // if (media?.cover_images) {
-        //     for(let i= 0; i< media.cover_images.length;i++) {
-        //         bloginfodata = await sportsinfo.findByIdAndUpdate(blog_id, {$push: {cover_images: {"name": media.cover_images[i].filepath + media.cover_images[i].filename }}}, {new: true})
+        // if (media?.blog_images) {
+        //     for(let i= 0; i< media.blog_images.length;i++) {
+        //         bloginfodata = await sportsinfo.findByIdAndUpdate(blog_id, {$push: {blog_images: {"name": media.blog_images[i].filepath + media.blog_images[i].filename }}}, {new: true})
         //     }
         // } 
         res.status(200).send({
@@ -90,7 +90,7 @@ export const updateBlogInfo = async (req, res) => {
 export const getBlogInfoAll = async (req, res) => {
     try {
         const data = await sportsinfo.find().select([
-            'cover_image',
+            'cover_image_blog',
             'blog_info.name',
             'blog_info.description',
             'blog_info.fulltext',
@@ -122,7 +122,7 @@ export const getBlogInfoAll = async (req, res) => {
 
 export const getbloginfobyid = async (req, res) => {
     try {
-        const blog_id = req.query.bid
+        const blog_id = req.query.blog_id
 
         const data = await sportsinfo.findById(blog_id);
         if (data <= 0) {
@@ -151,7 +151,7 @@ export const getbloginfobyid = async (req, res) => {
 
 export const deleteBlogInfo = async (req, res) => {
     try {
-        const blog_id = req.query.bid
+        const blog_id = req.query.blog_id
         const bloginfoData = await sportsinfo.findByIdAndDelete(blog_id)
         // const fs = require("fs")
         // const pathToFile = "/sports-info/"
@@ -178,6 +178,26 @@ export const deleteBlogInfo = async (req, res) => {
     }
 }
 
+
+export const deleteBlogImage = async (req, res) => {
+    try {
+        const blog_id = req.query.blog_id
+        const image_id = req.query.image_id
+        const bloginfodata = await sportsinfo.findByIdAndUpdate(blog_id, {$pull : {cover_image_blog: {_id : image_id}}}, {new: true})
+
+        res.status(201).send({
+            success: true,
+            data: bloginfodata,
+            message: 'Blog images deleted successfully',
+        })
+    }
+    catch (err) {
+        res.status(401).send({
+            success: false,
+            message: 'Blog-info.controller: ' + err.message
+        });
+    }
+}
 
 // Blog Info Apis End
 

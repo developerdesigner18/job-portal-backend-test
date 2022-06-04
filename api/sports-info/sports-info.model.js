@@ -5,11 +5,11 @@ const { Schema } = mongoose;
 const collectionName = 'sports-info'
 const sportsschema = Schema({
 //   blog api model
-    cover_images: [{
+    blog_images: [{
         name: String,
     }],
     
-    cover_image: String,
+    cover_image_blog: String,
     blog_info: {
         name: String,
         description: String,
