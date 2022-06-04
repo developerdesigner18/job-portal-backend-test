@@ -39,6 +39,21 @@ export const inserthomeinfo = async (req, res) => {
             console.log("=--==-=--=home_image_title", content.home_image_title[i]);
             data.home_images.push({name: media.home_images[i].filepath + media.home_images[i].filename, title: content.home_image_title[i]});
         }
+
+        // for(let j=0; j<content.rd3_references.length;j++){
+        //     data.rd3_references.push({
+        //         question: content.rd3_references_question,
+        //         name: content.rd3_references_name,
+        //         rd3_image: media.rd3_references_rd3_image[0].filepath + media.rd3_references_rd3_image[0].filename,
+        //         description: content.rd3_references_description,
+        //         designation: content.rd3_references_designation
+        //     })
+        // }
+
+        // for(let i = 0; i < media.rd3_references.length; i++) {
+        //     console.log("=--==-=--=home_image_title", content.home_image_title[i]);
+        //     data.home_images.push({name: media.home_images[i].filepath + media.home_images[i].filename, title: content.home_image_title[i]});
+        // }
         const homeData = await homeinfo.create(data)
         res.status(200).send({
             success: true,
@@ -79,7 +94,7 @@ export const updatehomeInfo = async (req, res) => {
             rd3_references: {
                 question: content.rd3_references_question,
                 name: content.rd3_references_name,
-                rd3_image: media.rd3_references_rd3_image[0].filepath + media.rd3_references_rd3_image[0].filename,
+                rd3_image: media.rd3_references_image[0].filepath + media.rd3_references_image[0].filename,
                 description: content.rd3_references_description,
                 designation: content.rd3_references_designation
             },
@@ -90,6 +105,11 @@ export const updatehomeInfo = async (req, res) => {
                 homeinfodata = await homeinfo.findByIdAndUpdate(content.home_id, {$push: {home_images: {"name": media.home_images[i].filepath + media.home_images[i].filename }}}, {new: true})
             }
         }
+        // if (media?.rd3_references_image) {
+        //     for(let i= 0; i< media.rd3_references_image.length;i++) {
+        //         homeinfodata = await homeinfo.findByIdAndUpdate(content.home_id, {$push: {rd3_image: {"name": media.rd3_references_image[i].filepath + media.rd3_references_image[i].filename }}}, {new: true})
+        //     }
+        // }
         res.status(200).send({
             success: true,
             data: homeinfodata,
@@ -183,9 +203,7 @@ export const deletehomeImage = async (req, res) => {
 }
 export const gethomeInfoAll = async (req, res) => {
     try {
-        const data = await homeinfo.find()
-        .lean()
-        .exec();
+        const data = await homeinfo.find().lean().exec();
 
         if (data <= 0) {
             res.status(200).send({

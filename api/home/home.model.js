@@ -27,7 +27,10 @@ const homeSchema = Schema({
     rd3_references:[{
         question: String,
         name: String,
-        rd3_image: String,
+        // rd3_image: [{
+        //     name: String
+        // }],
+        rd3_image:  String,
         description: String,
         designation: String
     }]
