@@ -96,7 +96,8 @@ export const getBlogInfoAll = async (req, res) => {
             'blog_info.fulltext',
             'user'
         ]);
-        if (data <= 0) {
+        const result = data.filter(s => s.blog_info.name );
+        if (result <= 0) {
             res.status(200).send({
                 success: false,
                 message: 'blog-info data not found'
@@ -105,7 +106,7 @@ export const getBlogInfoAll = async (req, res) => {
         else {
             res.status(200).send({
                 success: true,
-                data: data,
+                data: result,
                 length: data.length,
                 message: 'blog-info data fetched successfully'
             })
