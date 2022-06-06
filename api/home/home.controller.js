@@ -29,7 +29,7 @@ export const inserthomeinfo = async (req, res) => {
             rd3_references: {
                 question: content.rd3_references_question,
                 name: content.rd3_references_name,
-                rd3_image: media.rd3_references_rd3_image[0].filepath + media.rd3_references_rd3_image[0].filename,
+                rd3_image: media.rd3_references_image[0].filepath + media.rd3_references_image[0].filename,
                 description: content.rd3_references_description,
                 designation: content.rd3_references_designation
             }
@@ -37,7 +37,7 @@ export const inserthomeinfo = async (req, res) => {
 
         for(let i = 0; i < media.home_images.length; i++) {
             console.log("=--==-=--=home_image_title", content.home_image_title[i]);
-            data.home_images.push({name: media.home_images[i].filepath + media.home_images[i].filename, title: content.home_image_title[i]});
+            data.home_images.push({name: media.home_images[i].filepath + media.home_images[i].filename});
         }
 
         // for(let j=0; j<content.rd3_references.length;j++){

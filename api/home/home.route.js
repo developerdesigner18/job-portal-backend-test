@@ -46,8 +46,8 @@ const homeStorageMul = multer({
         }
     }
 })
-homeRouter.post("/inserthomeinfo", checkJWT, homeStorageMul.fields([{name: 'home_images', maxCount: 4}, {name: 'rd3_references_rd3_image', maxCount: 1}]), inserthomeinfo)
-homeRouter.post("/updateHomeInfo", checkJWT, homeStorageMul.fields([{name: 'home_images', maxCount: 4}, {name: 'rd3_references_rd3_image', maxCount: 1}]), updatehomeInfo)
+homeRouter.post("/inserthomeinfo", checkJWT, homeStorageMul.fields([{name: 'home_images', maxCount: 4}, {name: 'rd3_references_image', maxCount: 1}]), inserthomeinfo)
+homeRouter.post("/updateHomeInfo", checkJWT, homeStorageMul.fields([{name: 'home_images', maxCount: 4}, {name: 'rd3_references_image', maxCount: 1}]), updatehomeInfo)
 homeRouter.get("/gethomeInfoAll", gethomeInfoAll)
 homeRouter.get("/gethomeinfobyid", gethomeinfobyid)
 homeRouter.post("/deletehomeImage", checkJWT, deletehomeImage)
